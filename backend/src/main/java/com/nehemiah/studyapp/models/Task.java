@@ -1,5 +1,7 @@
 package com.nehemiah.studyapp.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,9 +22,12 @@ public class Task {
 
     private String title;
 
+    private String description;
+
     private boolean completed;
 
     @ManyToOne
     @JoinColumn(name = "tank_id")
+    @JsonBackReference
     private Tank tank;
 }
