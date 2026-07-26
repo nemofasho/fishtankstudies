@@ -27,4 +27,8 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "tank_id")
     private Tank tank;
+
+    @ManyToOne
+    @JoinColumn(name = "sender_id")
+    private User usersender;
 }
