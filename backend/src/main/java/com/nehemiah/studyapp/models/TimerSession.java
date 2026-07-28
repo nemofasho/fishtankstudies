@@ -1,4 +1,6 @@
 package com.nehemiah.studyapp.models;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,9 +18,14 @@ public class TimerSession {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private int durationMinutes;
+    private int duration; // Duration in minutes
 
     private boolean active;
+    
+    private LocalDateTime startTime;
+
+    private LocalDateTime endTime;
+
 
     @ManyToOne
     private Tank tank;
