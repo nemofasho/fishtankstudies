@@ -1,54 +1,116 @@
 package com.nehemiah.studyapp.Services;
 
+import com.nehemiah.studyapp.dto.tank.CreateTankRequest;
+import com.nehemiah.studyapp.dto.tank.UpdateTankRequest;
+import com.nehemiah.studyapp.exception.ResourceNotFoundException;
+import com.nehemiah.studyapp.dto.tank.TankResponse;
 import com.nehemiah.studyapp.models.Tank;
 import com.nehemiah.studyapp.models.User;
 import com.nehemiah.studyapp.Repositories.TankRepository;
 import com.nehemiah.studyapp.Repositories.UserRepository;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TankService {
 
-    @Autowired
-    private TankRepository tankRepository;
+    private final TankRepository tankRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    public TankService(TankRepository tankRepository,
+                       UserRepository userRepository) {
 
-    public Tank createTank(Tank tank) {
-        return tankRepository.save(tank);
+        this.tankRepository = tankRepository;
+        this.userRepository = userRepository;
     }
 
-    public List<Tank> getAllTanks() {
-        return tankRepository.findAll();
+    public TankResponse createTank(CreateTankRequest request) {
+
+        Tank tank = new Tank();
+
+        tank.setName(request.getName());
+        tank.setSubject(request.getSubject());
+        tank.setClassName(request.getClassName());
+
+        Tank savedTank = tankRepository.save(tank);
+
+        return mapToResponse(savedTank);
     }
 
-    public Tank getTankById(Long id) {
+    public List<TankResponse> getAllTanks() {
 
-        return tankRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tank not found"));
+        return tankRepository.findAll()
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
     }
 
-    public Tank addUserToTank(Long tankId, Long userId) {
+    public TankResponse getTankById(Long id) {
 
-        Tank tank = getTankById(tankId);
+        Tank tank = tankRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tank not found with id: " + id));
+
+        return mapToResponse(tank);
+    }
+
+    public TankResponse updateTank(Long id,
+                                   UpdateTankRequest request) {
+
+        Tank tank = tankRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tank not found with id: " + id));
+
+        tank.setName(request.getName());
+        tank.setSubject(request.getSubject());
+        tank.setClassName(request.getClassName());
+
+        Tank updatedTank = tankRepository.save(tank);
+
+        return mapToResponse(updatedTank);
+    }
+
+    public TankResponse addUserToTank(Long tankId,
+                                      Long userId) {
+
+        Tank tank = tankRepository.findById(tankId)
+                .orElseThrow(() -> new ResourceNotFoundException("Tank not found with id: " + tankId));
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
 
-        if (!tank.getMembers().contains(user)) {
-            tank.getMembers().add(user);
-        }
+        tank.getMembers().add(user);
 
-        return tankRepository.save(tank);
+        Tank updatedTank = tankRepository.save(tank);
+
+        return mapToResponse(updatedTank);
     }
 
     public void deleteTank(Long id) {
-        tankRepository.deleteById(id);
+
+        Tank tank = tankRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Tank not found with id: " + id));
+
+        tankRepository.delete(tank);
     }
 
+    private TankResponse mapToResponse(Tank tank) {
+
+        TankResponse response = new TankResponse();
+
+        response.setId(tank.getId());
+        response.setName(tank.getName());
+        response.setSubject(tank.getSubject());
+        response.setClassName(tank.getClassName());
+
+        response.setMemberCount(
+                tank.getMembers() == null ? 0 : tank.getMembers().size()
+        );
+
+        response.setTaskCount(
+                tank.getTasks() == null ? 0 : tank.getTasks().size()
+        );
+
+        return response;
+    }
 }
