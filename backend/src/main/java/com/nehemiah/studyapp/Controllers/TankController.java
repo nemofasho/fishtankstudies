@@ -15,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/tanks")
+@CrossOrigin(origins = "http://localhost:5173")
 public class TankController {
 
     @Autowired
