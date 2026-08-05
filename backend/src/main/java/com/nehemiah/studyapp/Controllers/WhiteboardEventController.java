@@ -12,6 +12,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/whiteboard")
+@CrossOrigin(origins = "http://localhost:5173")
 public class WhiteboardEventController {
 
     private final WhiteboardEventService whiteboardEventService;

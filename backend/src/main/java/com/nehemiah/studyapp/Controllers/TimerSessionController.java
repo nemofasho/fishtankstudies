@@ -13,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/timers")
+@CrossOrigin(origins = "http://localhost:5173")
 public class TimerSessionController {
 
     private final TimerSessionService timerSessionService;
