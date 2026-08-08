@@ -1,24 +1,54 @@
 import { useParams } from "react-router-dom";
+import { useState } from "react";
 
+import TankHeader from "../components/TankHeader";
+import WorkspacePanel from "../components/WorkspacePanel";
+
+import "../styles/tank.css";
 function TankPage() {
 
-  const { tankId } = useParams();
+    const { tankId } = useParams();
 
-  return (
-    <div>
-      <h1>Tank</h1>
+    // Temporary mock data
+    const [tank] = useState({
+        id: tankId,
+        name: "Database Study Group",
+        subject: "Computer Science",
+        className: "CSC 471"
+    });
 
-      <p>Tank ID: {tankId}</p>
+    return (
 
-      <h2>Tasks</h2>
+        <main className="tank-page">
 
-      <h2>Timer</h2>
+            <TankHeader tank={tank} />
 
-      <h2>Chat</h2>
+            <div className="tank-layout">
 
-      <h2>Whiteboard</h2>
-    </div>
-  );
+                <WorkspacePanel />
+
+                <section className="chat-area">
+
+                    <div className="chat-placeholder">
+
+                        <h2>Tank Chat</h2>
+
+                        <p>
+
+                            Chat will be implemented later.
+
+                        </p>
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </main>
+
+    );
+
 }
 
 export default TankPage;

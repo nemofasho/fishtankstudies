@@ -1,33 +1,60 @@
+import { useEffect, useState } from "react";
 import TankCard from "../components/TankCard";
-
+import { getAllTanks } from "../services/tankService";
+import { Link } from "react-router-dom";
 function Dashboard() {
 
-  const tanks = [
-    {
-      id: 1,
-      name: "Database Study Group",
-      subject: "Computer Science",
-      className: "CSC 471",
-      memberCount: 5,
-      taskCount: 3
-    },
-    {
-      id: 2,
-      name: "Programming Languages",
-      subject: "Computer Science",
-      className: "CSC 339",
-      memberCount: 4,
-      taskCount: 6
-    },
-    {
-      id: 3,
-      name: "Operating Systems",
-      subject: "Computer Science",
-      className: "CSC 362",
-      memberCount: 6,
-      taskCount: 4
+  const [tanks, setTanks] = useState([]);
+
+  const [loading, setLoading] = useState(true);
+
+  const [error, setError] = useState(null);
+
+
+  useEffect(() => {
+
+    async function loadTanks() {
+
+      try {
+
+        const data = await getAllTanks();
+
+        setTanks(data);
+
+      } catch (error) {
+
+        console.error(error);
+
+        setError("Unable to load Tanks.");
+
+      } finally {
+
+        setLoading(false);
+
+      }
     }
-  ];
+
+    loadTanks();
+
+  }, []);
+
+
+  if (loading) {
+    return (
+      <main className="dashboard">
+        <p>Loading Tanks...</p>
+      </main>
+    );
+  }
+
+
+  if (error) {
+    return (
+      <main className="dashboard">
+        <p>{error}</p>
+      </main>
+    );
+  }
 
   return (
     <main className="dashboard">
@@ -39,9 +66,12 @@ function Dashboard() {
           <p>Select a Tank and start studying.</p>
         </div>
 
-        <button className="create-tank-button">
+        <Link
+          to="/tanks/create"
+          className="create-tank-button"
+        >
           + Create Tank
-        </button>
+        </Link>
 
       </div>
 
