@@ -1,0 +1,165 @@
+.tank-page {
+
+    display: flex;
+
+    flex-direction: column;
+
+    height: calc(100vh - 70px);
+
+}
+
+.tank-header {
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 30px;
+
+    padding: 20px 30px;
+
+    border-bottom: 1px solid #ddd;
+
+}
+
+.back-button {
+
+    text-decoration: none;
+
+    font-weight: bold;
+
+}
+
+.tank-info h1 {
+
+    margin: 0;
+
+}
+
+.tank-info p {
+
+    margin-top: 6px;
+
+    color: gray;
+
+}
+
+.tank-layout {
+
+    display: flex;
+
+    flex: 1;
+
+    overflow: hidden;
+
+}
+
+.workspace-panel {
+
+    width: 300px;
+
+    min-width: 300px;
+
+    overflow-y: auto;
+
+    border-right: 1px solid #ddd;
+
+    padding: 20px;
+
+    background: #fafafa;
+
+}
+
+.workspace-section {
+
+    margin-bottom: 30px;
+
+}
+
+.section-header {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+}
+
+.section-header button {
+
+    width: 28px;
+
+    height: 28px;
+
+    cursor: pointer;
+
+}
+
+.placeholder-list {
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-top: 15px;
+
+}
+
+.open-button {
+
+    width: 100%;
+
+    text-align: left;
+
+    padding: 8px;
+
+    cursor: pointer;
+
+}
+
+.chat-area {
+
+    flex: 1;
+
+    display: flex;
+
+    justify-content: center;
+
+    align-items: center;
+
+    background: white;
+
+}
+
+.chat-placeholder {
+
+    text-align: center;
+
+    color: gray;
+
+}
+
+@media (max-width: 900px) {
+
+    .tank-layout {
+
+        flex-direction: column;
+
+    }
+
+    .workspace-panel {
+
+        width: 100%;
+
+        min-width: 100%;
+
+        border-right: none;
+
+        border-bottom: 1px solid #ddd;
+
+    }
+
+}

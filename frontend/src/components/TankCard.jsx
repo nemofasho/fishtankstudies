@@ -13,8 +13,8 @@ function TankCard({ tank }) {
       <p className="tank-subject">{tank.subject}</p>
 
       <div className="tank-stats">
-        <span>{tank.memberCount} Members</span>
-        <span>{tank.taskCount} Tasks</span>
+        <span>{tank.memberCount ?? 0} Members</span>
+        <span>{tank.taskCount ?? 0} Tasks</span>
       </div>
 
       <Link

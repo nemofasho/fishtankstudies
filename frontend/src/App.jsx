@@ -9,6 +9,7 @@ import Dashboard from "./pages/Dashboard";
 import TankPage from "./pages/TankPage";
 import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
+import CreateTank from "./pages/CreateTank";
 
 function App() {
   return (
@@ -31,6 +32,11 @@ function App() {
       <Route
         path="/tanks/:tankId"
         element={<TankPage />}
+      />
+
+      <Route
+        path="/tanks/create"
+        element={<CreateTank />}
       />
 
       <Route

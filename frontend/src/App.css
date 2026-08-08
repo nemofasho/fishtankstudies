@@ -342,3 +342,90 @@
   }
 
 }
+
+.create-tank-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 24px;
+}
+
+.create-tank-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.create-tank-container h1 {
+  margin-bottom: 8px;
+}
+
+.create-tank-container > p {
+  margin-bottom: 32px;
+}
+
+.create-tank-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 12px;
+
+  border: 1px solid #ccc;
+  border-radius: 8px;
+
+  font-size: 16px;
+}
+
+.form-group input:focus {
+  outline: 2px solid;
+  outline-offset: 2px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.cancel-button,
+.submit-button {
+  padding: 12px 18px;
+
+  border: 1px solid;
+  border-radius: 8px;
+
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.submit-button:disabled,
+.cancel-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-error {
+  padding: 12px;
+  margin-bottom: 20px;
+
+  border: 1px solid;
+  border-radius: 8px;
+}
+
+.create-tank-button {
+  display: inline-block;
+  text-decoration: none;
+}
