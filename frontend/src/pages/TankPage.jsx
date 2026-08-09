@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import { useState } from "react";
 
 import TankHeader from "../components/TankHeader";
-import WorkspacePanel from "../components/WorkspacePanel";
+import WorkspacePanel from "../components/Tank/WorkspacePanel";
 
 import "../styles/tank.css";
 function TankPage() {

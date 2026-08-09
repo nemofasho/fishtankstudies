@@ -163,3 +163,294 @@
     }
 
 }
+
+/* =========================
+   Workspace
+========================= */
+
+.workspace-title {
+  margin-bottom: 20px;
+}
+
+.workspace-title h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.workspace-section {
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.workspace-section:last-child {
+  border-bottom: none;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.section-header h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.section-count {
+  font-size: 13px;
+  opacity: 0.7;
+}
+
+.add-button {
+  width: 26px;
+  height: 26px;
+
+  border: 1px solid #ccc;
+  border-radius: 6px;
+
+  background: transparent;
+
+  font-size: 18px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.add-button:hover {
+  background: #eee;
+}
+
+
+/* =========================
+   Members
+========================= */
+
+.member-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  margin-top: 12px;
+}
+
+.member-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  padding: 6px 4px;
+
+  border-radius: 6px;
+}
+
+.member-item:hover {
+  background: #eee;
+}
+
+.member-status {
+  width: 9px;
+  height: 9px;
+
+  border-radius: 50%;
+
+  flex-shrink: 0;
+}
+
+.member-status.online {
+  background: #22c55e;
+}
+
+.member-status.offline {
+  background: #9ca3af;
+}
+
+.member-name {
+  font-size: 14px;
+}
+
+
+/* =========================
+   Tasks
+========================= */
+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  margin-top: 12px;
+}
+
+.task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+
+  padding: 7px 4px;
+
+  border-radius: 6px;
+}
+
+.task-item:hover {
+  background: #eee;
+}
+
+.task-item input {
+  margin-top: 3px;
+  cursor: pointer;
+}
+
+.task-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  min-width: 0;
+}
+
+.task-title {
+  font-size: 14px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.task-title.completed {
+  text-decoration: line-through;
+  opacity: 0.55;
+}
+
+.task-due-date {
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+
+/* =========================
+   Timers
+========================= */
+
+.timer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  margin-top: 12px;
+}
+
+.timer-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  padding: 9px;
+
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.timer-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+
+  min-width: 0;
+}
+
+.timer-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.timer-time {
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer-status {
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+.timer-status.active {
+  font-weight: 600;
+}
+
+
+/* =========================
+   Whiteboards
+========================= */
+
+.whiteboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  margin-top: 12px;
+}
+
+.whiteboard-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 10px;
+
+  padding: 8px;
+
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.whiteboard-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+
+  min-width: 0;
+}
+
+.whiteboard-name {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.whiteboard-date {
+  font-size: 10px;
+  opacity: 0.6;
+}
+
+.open-button {
+  flex-shrink: 0;
+
+  padding: 5px 9px;
+
+  border: 1px solid #ccc;
+  border-radius: 6px;
+
+  background: transparent;
+
+  cursor: pointer;
+}
+
+.open-button:hover {
+  background: #eee;
+}
+
+
+/* =========================
+   Empty States
+========================= */
+
+.empty-section {
+  margin: 12px 0 0;
+
+  font-size: 13px;
+
+  opacity: 0.6;
+}
