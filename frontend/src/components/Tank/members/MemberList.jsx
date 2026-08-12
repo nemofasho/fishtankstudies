@@ -1,6 +1,6 @@
 import MemberItem from "./MemberItem";
 
-function MemberList({ members }) {
+function MemberList({ members = [] }) {
   return (
     <section className="workspace-section">
 
@@ -13,18 +13,20 @@ function MemberList({ members }) {
       </div>
 
       <div className="member-list">
-        {members.length > 0 ? (
+
+        {members.length === 0 ? (
+          <p className="empty-section">
+            No members
+          </p>
+        ) : (
           members.map((member) => (
             <MemberItem
               key={member.id}
               member={member}
             />
           ))
-        ) : (
-          <p className="empty-section">
-            No members
-          </p>
         )}
+
       </div>
 
     </section>

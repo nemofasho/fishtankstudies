@@ -1,13 +1,9 @@
 import MemberList from "./Members/MemberList";
-
 import TaskSection from "./Tasks/TaskSection";
-
 import TimerSection from "./Timers/TimerSection";
-
 import WhiteboardSection from "./Whiteboards/WhiteboardSection";
 
 function WorkspacePanel() {
-
   const members = [
     {
       id: 1,
@@ -56,13 +52,13 @@ function WorkspacePanel() {
     {
       id: 1,
       name: "Pomodoro",
-      durationSeconds: 18 * 60 + 42,
+      durationSeconds: 1122,
       active: true
     },
     {
       id: 2,
       name: "Break",
-      durationSeconds: 3 * 60 + 17,
+      durationSeconds: 197,
       active: true
     }
   ];
@@ -71,12 +67,12 @@ function WorkspacePanel() {
     {
       id: 1,
       name: "Lecture Notes",
-      lastEdited: "today"
+      lastEdited: "Today"
     },
     {
       id: 2,
       name: "Homework Review",
-      lastEdited: "yesterday"
+      lastEdited: "Yesterday"
     },
     {
       id: 3,
@@ -92,21 +88,13 @@ function WorkspacePanel() {
         <h2>Workspace</h2>
       </div>
 
-      <MemberList
-        members={members}
-      />
+      <MemberList members={members} />
 
-      <TaskSection
-        tasks={tasks}
-      />
+      <TaskSection tasks={tasks} />
 
-      <TimerSection
-        timers={timers}
-      />
+      <TimerSection timers={timers} />
 
-      <WhiteboardSection
-        whiteboards={whiteboards}
-      />
+      <WhiteboardSection whiteboards={whiteboards} />
 
     </aside>
   );

@@ -1,6 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useState } from "react";
 
+import ChatWindow from "../components/Tank/Chat/ChatWindow";
 import TankHeader from "../components/TankHeader";
 import WorkspacePanel from "../components/Tank/WorkspacePanel";
 
@@ -17,6 +18,29 @@ function TankPage() {
         className: "CSC 471"
     });
 
+     const members = [
+    {
+      id: 1,
+      name: "Nehemiah",
+      online: true
+    },
+    {
+      id: 2,
+      name: "Alex",
+      online: true
+    },
+    {
+      id: 3,
+      name: "Sarah",
+      online: false
+    },
+    {
+      id: 4,
+      name: "Jordan",
+      online: true
+    }
+  ];
+
     return (
 
         <main className="tank-page">
@@ -27,21 +51,11 @@ function TankPage() {
 
                 <WorkspacePanel />
 
-                <section className="chat-area">
+                <ChatWindow
+                    tankName={tank.name}
+                    members={members}
+                />
 
-                    <div className="chat-placeholder">
-
-                        <h2>Tank Chat</h2>
-
-                        <p>
-
-                            Chat will be implemented later.
-
-                        </p>
-
-                    </div>
-
-                </section>
 
             </div>
 
