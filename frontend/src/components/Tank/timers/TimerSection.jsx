@@ -1,48 +1,54 @@
-import TimerItem from "./TimerItem";
-import CreateTimerButton from "./CreateTimerButton";
+import React from "react";
 
-function TimerSection({ timers }) {
+function formatTime(seconds) {
+    if (seconds == null) {
+        return "00:00";
+    }
 
-  function handleCreateTimer() {
-    console.log("Create Timer clicked");
-  }
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
 
-  return (
-    <section className="workspace-section">
+    return `${String(minutes).padStart(2, "0")}:${String(
+        remainingSeconds
+    ).padStart(2, "0")}`;
+}
 
-      <div className="section-header">
+function TimerSection({ timers = [] }) {
+    return (
+        <section className="timer-section">
+            <div className="workspace-section-header">
+                <h2>Timers</h2>
+                <span>{timers.length}</span>
+            </div>
 
-        <h3>Timers</h3>
+            {timers.length === 0 ? (
+                <p className="empty-state">
+                    No active timers.
+                </p>
+            ) : (
+                <div className="timer-list">
+                    {timers.map((timer) => (
+                        <div
+                            key={timer.id}
+                            className="timer-item"
+                        >
+                            <div>
+                                <strong>
+                                    {timer.name || "Timer"}
+                                </strong>
+                            </div>
 
-        <CreateTimerButton
-          onClick={handleCreateTimer}
-        />
-
-      </div>
-
-      <div className="timer-list">
-
-        {timers.length > 0 ? (
-
-          timers.map((timer) => (
-            <TimerItem
-              key={timer.id}
-              timer={timer}
-            />
-          ))
-
-        ) : (
-
-          <p className="empty-section">
-            No timers
-          </p>
-
-        )}
-
-      </div>
-
-    </section>
-  );
+                            <span className="timer-countdown">
+                                {formatTime(
+                                    timer.remainingSeconds
+                                )}
+                            </span>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </section>
+    );
 }
 
 export default TimerSection;

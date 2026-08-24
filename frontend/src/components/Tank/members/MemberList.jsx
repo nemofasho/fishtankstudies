@@ -1,36 +1,47 @@
-import MemberItem from "./MemberItem";
+import React from "react";
 
 function MemberList({ members = [] }) {
-  return (
-    <section className="workspace-section">
+    return (
+        <section className="member-section">
+            <div className="workspace-section-header">
+                <h2>Members</h2>
+                <span>{members.length}</span>
+            </div>
 
-      <div className="section-header">
-        <h3>Members</h3>
+            {members.length === 0 ? (
+                <p className="empty-state">
+                    No members to display.
+                </p>
+            ) : (
+                <div className="member-list">
+                    {members.map((member) => (
+                        <div
+                            key={member.id}
+                            className="member-item"
+                        >
+                            <div className="member-avatar">
+                                {member.username
+                                    ?.charAt(0)
+                                    .toUpperCase()}
+                            </div>
 
-        <span className="section-count">
-          {members.length}
-        </span>
-      </div>
+                            <div className="member-info">
+                                <strong>
+                                    {member.username}
+                                </strong>
 
-      <div className="member-list">
-
-        {members.length === 0 ? (
-          <p className="empty-section">
-            No members
-          </p>
-        ) : (
-          members.map((member) => (
-            <MemberItem
-              key={member.id}
-              member={member}
-            />
-          ))
-        )}
-
-      </div>
-
-    </section>
-  );
+                                {member.email && (
+                                    <small>
+                                        {member.email}
+                                    </small>
+                                )}
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </section>
+    );
 }
 
 export default MemberList;

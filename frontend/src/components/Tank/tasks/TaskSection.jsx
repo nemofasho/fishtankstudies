@@ -1,66 +1,48 @@
-import { useState } from "react";
+import React from "react";
 
-import TaskItem from "./TaskItem";
-import CreateTaskButton from "./CreateTaskButton";
+function TaskSection({ tasks = [], onTaskSelect }) {
+    return (
+        <section className="task-section">
+            <div className="workspace-section-header">
+                <h2>Tasks</h2>
+                <span>{tasks.length}</span>
+            </div>
 
-function TaskSection({ tasks }) {
+            {tasks.length === 0 ? (
+                <p className="empty-state">
+                    No tasks yet.
+                </p>
+            ) : (
+                <div className="task-list">
+                    {tasks.map((task, index) => (
+                        <button
+                            key={task.id}
+                            className={`task-item ${
+                                task.completed ? "completed" : ""
+                            }`}
+                            onClick={() =>
+                                onTaskSelect?.(task)
+                            }
+                        >
+                            <span className="task-number">
+                                {index + 1}
+                            </span>
 
-  const [taskList, setTaskList] = useState(tasks);
+                            <span className="task-content">
+                                <strong>{task.title}</strong>
 
-  function handleToggle(taskId) {
-    setTaskList((previousTasks) =>
-      previousTasks.map((task) =>
-        task.id === taskId
-          ? {
-              ...task,
-              completed: !task.completed
-            }
-          : task
-      )
+                                {task.description && (
+                                    <small>
+                                        {task.description}
+                                    </small>
+                                )}
+                            </span>
+                        </button>
+                    ))}
+                </div>
+            )}
+        </section>
     );
-  }
-
-  function handleCreateTask() {
-    console.log("Create Task clicked");
-  }
-
-  return (
-    <section className="workspace-section">
-
-      <div className="section-header">
-
-        <h3>Tasks</h3>
-
-        <CreateTaskButton
-          onClick={handleCreateTask}
-        />
-
-      </div>
-
-      <div className="task-list">
-
-        {taskList.length > 0 ? (
-
-          taskList.map((task) => (
-            <TaskItem
-              key={task.id}
-              task={task}
-              onToggle={handleToggle}
-            />
-          ))
-
-        ) : (
-
-          <p className="empty-section">
-            No tasks
-          </p>
-
-        )}
-
-      </div>
-
-    </section>
-  );
 }
 
 export default TaskSection;

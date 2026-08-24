@@ -1,26 +1,22 @@
 import { useState } from "react";
 
-import SendButton from "./SendButton";
-
 function MessageInput({
-  onSend,
+  onSubmit,
   disabled = false
 }) {
-  const [message, setMessage] = useState("");
+  const [content, setContent] = useState("");
 
-  async function handleSubmit(event) {
+  function handleSubmit(event) {
     event.preventDefault();
 
-    const trimmedMessage =
-      message.trim();
+    const trimmedContent = content.trim();
 
-    if (!trimmedMessage || disabled) {
+    if (!trimmedContent || disabled) {
       return;
     }
 
-    await onSend(trimmedMessage);
-
-    setMessage("");
+    onSubmit(trimmedContent);
+    setContent("");
   }
 
   function handleKeyDown(event) {
@@ -29,7 +25,6 @@ function MessageInput({
       !event.shiftKey
     ) {
       event.preventDefault();
-
       handleSubmit(event);
     }
   }
@@ -39,30 +34,26 @@ function MessageInput({
       className="message-input-container"
       onSubmit={handleSubmit}
     >
-
       <textarea
-        value={message}
+        value={content}
         onChange={(event) =>
-          setMessage(event.target.value)
+          setContent(event.target.value)
         }
         onKeyDown={handleKeyDown}
-        placeholder={
-          disabled
-            ? "Sending..."
-            : "Type a message..."
-        }
-        rows="1"
+        placeholder="Type a message..."
         disabled={disabled}
-        aria-label="Message"
+        rows={1}
       />
 
-      <SendButton
+      <button
+        type="submit"
+        className="send-button"
         disabled={
-          disabled ||
-          !message.trim()
+          disabled || !content.trim()
         }
-      />
-
+      >
+        {disabled ? "Sending..." : "Send"}
+      </button>
     </form>
   );
 }
