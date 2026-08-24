@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import TankCard from "../components/TankCard";
-import { getAllTanks } from "../services/tankService";
+import { getTanks } from "../services/tankService";
 import { Link } from "react-router-dom";
 function Dashboard() {
 
@@ -17,7 +17,7 @@ function Dashboard() {
 
       try {
 
-        const data = await getAllTanks();
+        const data = await getTanks();
 
         setTanks(data);
 

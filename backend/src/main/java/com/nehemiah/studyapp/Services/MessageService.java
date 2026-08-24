@@ -90,7 +90,7 @@ public class MessageService {
         response.setContent(message.getContent());
         response.setTimestamp(message.getTimestamp());
 
-        if (message.getSender() != null) {
+        if (message.getUsersender() != null) {
 
             response.setSenderId(
                     message.getUsersender().getId()

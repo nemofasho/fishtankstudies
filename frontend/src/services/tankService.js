@@ -1,31 +1,31 @@
-const API_URL = "http://localhost:8080/tanks";
+import apiRequest from "./api";
 
-export async function getAllTanks() {
+const TANKS_ENDPOINT = "/tanks";
 
-  const response = await fetch(API_URL);
-
-  if (!response.ok) {
-    throw new Error("Failed to load Tanks");
-  }
-
-  return await response.json();
+export async function getTank(tankId) {
+  return apiRequest(`${TANKS_ENDPOINT}/${tankId}`);
 }
 
+export async function getTanks() {
+  return apiRequest(TANKS_ENDPOINT);
+}
 
 export async function createTank(tankData) {
-  const response = await fetch(API_URL, {
+  return apiRequest(TANKS_ENDPOINT, {
     method: "POST",
-
-    headers: {
-      "Content-Type": "application/json"
-    },
-
     body: JSON.stringify(tankData)
   });
+}
 
-  if (!response.ok) {
-    throw new Error("Failed to create Tank");
-  }
+export async function updateTank(tankId, tankData) {
+  return apiRequest(`${TANKS_ENDPOINT}/${tankId}`, {
+    method: "PUT",
+    body: JSON.stringify(tankData)
+  });
+}
 
-  return await response.json();
+export async function deleteTank(tankId) {
+  return apiRequest(`${TANKS_ENDPOINT}/${tankId}`, {
+    method: "DELETE"
+  });
 }
