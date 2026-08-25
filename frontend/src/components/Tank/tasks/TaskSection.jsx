@@ -1,6 +1,58 @@
 import React from "react";
 
-function TaskSection({ tasks = [], onTaskSelect }) {
+function TaskSection({ tasks = [], loading = false, error = "", onRetry, onTaskSelect }) {
+    if (loading) {
+        return (
+            <section className="workspace-section">
+                <div className="section-header">
+                    <h3>Tasks</h3>
+                </div>
+
+                <p className="empty-section">
+                    Loading tasks...
+                </p>
+            </section>
+        );
+    }
+    
+    if (error) {
+        return (
+            <section className="workspace-section">
+                <div className="section-header">
+                    <h3>Tasks</h3>
+                </div>
+
+                <p className="empty-section">
+                    Unable to load tasks.
+                </p>
+
+                {onRetry && (
+                    <button
+                        type="button"
+                        className="open-button"
+                        onClick={onRetry}
+                    >
+                        Retry
+                    </button>
+                )}
+            </section>
+        );
+    }
+
+    if (tasks.length === 0) {
+        return (
+            <section className="workspace-section">
+                <div className="section-header">
+                    <h3>Tasks</h3>
+                </div>
+
+                <p className="empty-section">
+                    No tasks yet.
+                </p>
+            </section>
+        );
+    }
+
     return (
         <section className="task-section">
             <div className="workspace-section-header">

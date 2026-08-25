@@ -5,7 +5,9 @@ function ChatWindow({
   tank,
   messages = [],
   onSendMessage,
-  currentUserId
+  currentUserId,
+  loading = false,
+  error = ""
 }) {
   const messagesEndRef = useRef(null);
 
@@ -40,8 +42,16 @@ function ChatWindow({
 
       {/* Messages */}
       <div className="message-list">
-
-        {messages.length === 0 ? (
+        {loading ? (
+          <div className="chat-empty">
+            <h3>Loading messages...</h3>
+          </div>
+        ) : error ? (
+          <div className="chat-empty">
+            <h3>Unable to load messages</h3>
+            <p>{error}</p>
+          </div>
+        ) : messages.length === 0 ? (
           <div className="chat-empty">
             <h3>No messages yet</h3>
 
