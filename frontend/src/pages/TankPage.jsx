@@ -1,275 +1,688 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
-import WhiteboardPanel from "../components/Tank/whiteboards/WhiteboardPanel";
 import TankHeader from "../components/TankHeader";
 import WorkspacePanel from "../components/Tank/WorkspacePanel";
-import ChatWindow from "../components/Tank/Chat/ChatWindow";
+import ChatWindow from "../components/Tank/chat/ChatWindow";
+import WhiteboardPanel from "../components/Tank/whiteboards/WhiteboardPanel";
 
-import { getTank } from "../services/tankService";
+import {
+  getTank
+} from "../services/tankService";
 
-import { getTankTasks } from "../services/taskService";
+import {
+  getTankTasks,
+  createTask,
+  updateTask,
+  deleteTask
+} from "../services/taskService";
 
 import {
   getTankMessages,
-  sendMessage
+  sendMessage,
+  deleteMessage
 } from "../services/messageService";
 
 import {
-  getTankTimers
+  getTankTimers,
+  createTimer,
+  updateTimer,
+  deleteTimer
 } from "../services/timerSessionService";
 
 import {
   getTankWhiteboardEvents,
-  createWhiteboardEvent,
   clearWhiteboard
 } from "../services/whiteboardEventService";
 
 import "../styles/tank.css";
 
-function TankPage() {
+
+function TankPage({ currentUserId }) {
+
+  console.log("CURRENT USER ID:", currentUserId);
+
   const { tankId } = useParams();
 
-  // -------------------------
-  // Tank state
-  // -------------------------
+
+  /* =========================
+     Tank
+  ========================= */
 
   const [tank, setTank] = useState(null);
 
-  // -------------------------
-  // Workspace state
-  // -------------------------
+
+  /* =========================
+     Workspace Data
+  ========================= */
 
   const [tasks, setTasks] = useState([]);
+
   const [messages, setMessages] = useState([]);
+
   const [timers, setTimers] = useState([]);
-  const [whiteboards, setWhiteboards] = useState([]);
-  const [activeWorkspace, setActiveWorkspace] = useState("chat");
 
-  // Temporary user ID for testing
-  // Replace this with the authenticated user's ID later.
-  const [userId] = useState(1);
+  const [whiteboards, setWhiteboards] =
+    useState([]);
 
-  // -------------------------
-  // Page state
-  // -------------------------
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+  /* =========================
+     Workspace
+  ========================= */
 
-  // -------------------------
-  // Load Tank data
-  // -------------------------
+  const [activeWorkspace, setActiveWorkspace] =
+    useState("chat");
 
-  useEffect(() => {
-    async function loadTankData() {
-      try {
-        setLoading(true);
-        setError("");
 
-        const [
-          tankData,
-          taskData,
-          messageData,
-          timerData,
-          whiteboardData
-        ] = await Promise.all([
-          getTank(tankId),
-          getTankTasks(tankId),
-          getTankMessages(tankId),
-          getTankTimers(tankId),
-          getTankWhiteboardEvents(tankId)
-        ]);
+  /* =========================
+     Loading
+  ========================= */
 
-        setTank(tankData);
-        setTasks(taskData || []);
-        setMessages(messageData || []);
-        setTimers(timerData || []);
-        setWhiteboards(whiteboardData || []);
+  const [loading, setLoading] =
+    useState(true);
 
-      } catch (err) {
-        console.error("Failed to load Tank:", err);
+  const [error, setError] =
+    useState("");
 
-        setError(
-          err.message || "Failed to load Tank data."
-        );
 
-      } finally {
-        setLoading(false);
-      }
-    }
+  /* =========================
+     Load Tank
+  ========================= */
 
-    if (tankId) {
-      loadTankData();
-    }
-  }, [tankId]);
+  async function loadTankData() {
 
-  // -------------------------
-  // Send message
-  // -------------------------
-
-  async function handleSendMessage(content) {
     try {
-      if (!content || !content.trim()) {
-        return;
-      }
 
-      const messageData = {
-        content: content.trim()
-      };
+      setLoading(true);
+      setError("");
 
-      const savedMessage = await sendMessage(
-        tank.id,
-        userId,
-        messageData
+      const [
+        tankData,
+        taskData,
+        messageData,
+        timerData,
+        whiteboardData
+      ] = await Promise.all([
+
+        getTank(tankId),
+
+        getTankTasks(tankId),
+
+        getTankMessages(tankId),
+
+        getTankTimers(tankId),
+
+        getTankWhiteboardEvents(tankId)
+
+      ]);
+
+
+      setTank(tankData);
+
+      setTasks(taskData || []);
+
+      setMessages(messageData || []);
+
+      setTimers(timerData || []);
+
+      setWhiteboards(
+        whiteboardData || []
       );
 
-      setMessages((previousMessages) => [
+
+    } catch (err) {
+
+      console.error(
+        "Failed to load Tank:",
+        err
+      );
+
+      setError(
+        err.message ||
+        "Failed to load Tank data."
+      );
+
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  }
+
+
+  useEffect(() => {
+
+    loadTankData();
+
+  }, [tankId]);
+
+
+  /* =========================
+     TASK CRUD
+  ========================= */
+
+  async function handleCreateTask(
+    taskData
+  ) {
+
+    try {
+
+      const savedTask =
+        await createTask(
+          tank.id,
+          taskData
+        );
+
+      setTasks(previousTasks => [
+        ...previousTasks,
+        savedTask
+      ]);
+
+      return savedTask;
+
+    } catch (err) {
+
+      console.error(
+        "Failed to create task:",
+        err
+      );
+
+      throw err;
+
+    }
+
+  }
+
+
+  async function handleUpdateTask(
+    taskId,
+    taskData
+  ) {
+
+    try {
+
+      const updatedTask =
+        await updateTask(
+          taskId,
+          taskData
+        );
+
+      setTasks(previousTasks =>
+        previousTasks.map(task =>
+          task.id === updatedTask.id
+            ? updatedTask
+            : task
+        )
+      );
+
+      return updatedTask;
+
+    } catch (err) {
+
+      console.error(
+        "Failed to update task:",
+        err
+      );
+
+      throw err;
+
+    }
+
+  }
+
+
+  async function handleDeleteTask(
+    taskId
+  ) {
+
+    try {
+
+      await deleteTask(taskId);
+
+      setTasks(previousTasks =>
+        previousTasks.filter(
+          task => task.id !== taskId
+        )
+      );
+
+    } catch (err) {
+
+      console.error(
+        "Failed to delete task:",
+        err
+      );
+
+      throw err;
+
+    }
+
+  }
+
+
+  /* =========================
+     TIMER CRUD
+  ========================= */
+
+  async function handleCreateTimer(
+    timerData
+  ) {
+
+    try {
+
+      const savedTimer =
+        await createTimer(
+          tank.id,
+          timerData
+        );
+
+      setTimers(previousTimers => [
+        ...previousTimers,
+        savedTimer
+      ]);
+
+      return savedTimer;
+
+    } catch (err) {
+
+      console.error(
+        "Failed to create timer:",
+        err
+      );
+
+      throw err;
+
+    }
+
+  }
+
+
+  async function handleUpdateTimer(
+    timerId,
+    timerData
+  ) {
+
+    try {
+
+      const updatedTimer =
+        await updateTimer(
+          timerId,
+          timerData
+        );
+
+      setTimers(previousTimers =>
+        previousTimers.map(timer =>
+          timer.id === updatedTimer.id
+            ? updatedTimer
+            : timer
+        )
+      );
+
+      return updatedTimer;
+
+    } catch (err) {
+
+      console.error(
+        "Failed to update timer:",
+        err
+      );
+
+      throw err;
+
+    }
+
+  }
+
+
+  async function handleDeleteTimer(
+    timerId
+  ) {
+
+    try {
+
+      await deleteTimer(timerId);
+
+      setTimers(previousTimers =>
+        previousTimers.filter(
+          timer => timer.id !== timerId
+        )
+      );
+
+    } catch (err) {
+
+      console.error(
+        "Failed to delete timer:",
+        err
+      );
+
+      throw err;
+
+    }
+
+  }
+
+
+  /* =========================
+     MESSAGE CRUD
+  ========================= */
+
+  async function handleSendMessage(
+    content
+  ) {
+
+    if (!content?.trim()) {
+      return;
+    }
+
+    if (!currentUserId) {
+      throw new Error(
+        "Current user is not available."
+      );
+    }
+
+
+    try {
+
+      const savedMessage =
+        await sendMessage(
+          tank.id,
+          currentUserId,
+          {
+            content: content.trim()
+          }
+        );
+
+
+      setMessages(previousMessages => [
         ...previousMessages,
         savedMessage
       ]);
 
+
+      return savedMessage;
+
     } catch (err) {
+
       console.error(
         "Failed to send message:",
         err
       );
 
-      alert("Failed to send message.");
+      throw err;
+
     }
+
   }
 
-    async function handleCreateWhiteboardEvent(eventData) {
-      try {
-        const savedEvent =
-          await createWhiteboardEvent(
-            tank.id,
-            userId,
-            eventData
-          );
 
-      setWhiteboards(
-        (previousEvents) => [
-          ...previousEvents,
-          savedEvent
-        ]
+  async function handleDeleteMessage(
+    messageId
+  ) {
+
+    try {
+
+      await deleteMessage(
+        messageId
       );
 
-    } catch (error) {
+      setMessages(previousMessages =>
+        previousMessages.filter(
+          message =>
+            message.id !== messageId
+        )
+      );
+
+    } catch (err) {
+
       console.error(
-        "Failed to save whiteboard event:",
-        error
+        "Failed to delete message:",
+        err
       );
+
+      throw err;
+
     }
+
   }
 
-    async function handleClearWhiteboard() {
-      try {
-        await clearWhiteboard(tank.id);
 
-        setWhiteboards([]);
+  /* =========================
+     WHITEBOARD
+  ========================= */
 
-      } catch (error) {
-        console.error(
-          "Failed to clear whiteboard:",
-          error
-        );
-      }
+  async function handleClearWhiteboard() {
+
+    try {
+
+      await clearWhiteboard(
+        tank.id
+      );
+
+      setWhiteboards([]);
+
+    } catch (err) {
+
+      console.error(
+        "Failed to clear whiteboard:",
+        err
+      );
+
+      throw err;
+
     }
 
-  // -------------------------
-  // Loading state
-  // -------------------------
+  }
+
+
+  /* =========================
+     Loading
+  ========================= */
 
   if (loading) {
+
     return (
+
       <main className="tank-page-state">
-        <h2>Loading Tank...</h2>
+
+        <h2>
+          Loading Tank...
+        </h2>
+
+        <p>
+          Loading your workspace.
+        </p>
+
       </main>
+
     );
+
   }
 
-  // -------------------------
-  // Error state
-  // -------------------------
+
+  /* =========================
+     Error
+  ========================= */
 
   if (error) {
-    return (
-      <main className="tank-page-state">
-        <h2>Unable to load Tank</h2>
 
-        <p>{error}</p>
+    return (
+
+      <main className="tank-page-state">
+
+        <h2>
+          Unable to load Tank
+        </h2>
+
+        <p>
+          {error}
+        </p>
 
         <button
           type="button"
-          onClick={() => window.location.reload()}
+          onClick={loadTankData}
         >
           Try Again
         </button>
+
       </main>
+
     );
+
   }
 
-  // -------------------------
-  // Tank not found
-  // -------------------------
+
+  /* =========================
+     Tank Not Found
+  ========================= */
 
   if (!tank) {
+
     return (
+
       <main className="tank-page-state">
-        <h2>Tank not found</h2>
+
+        <h2>
+          Tank not found
+        </h2>
+
       </main>
+
     );
+
   }
 
-  // -------------------------
-  // Tank page
-  // -------------------------
+
+  /* =========================
+     PAGE
+  ========================= */
 
   return (
+
     <main className="tank-page">
 
-      {/* Tank information */}
       <TankHeader
         tank={tank}
       />
 
+
       <div className="tank-layout">
 
-        {/* Left workspace panel */}
+
+        {/* LEFT PANEL */}
+
         <WorkspacePanel
+
           tank={tank}
+
+          members={
+            tank.members || []
+          }
+
           tasks={tasks}
+
           timers={timers}
-          whiteboards={whiteboards}
-          members={[]}
-          activeWorkspace={activeWorkspace}
-          setActiveWorkspace={setActiveWorkspace}
+
+          whiteboards={
+            whiteboards
+          }
+
+          activeWorkspace={
+            activeWorkspace
+          }
+
+          setActiveWorkspace={
+            setActiveWorkspace
+          }
+
+          onCreateTask={
+            handleCreateTask
+          }
+
+          onUpdateTask={
+            handleUpdateTask
+          }
+
+          onDeleteTask={
+            handleDeleteTask
+          }
+
+          onCreateTimer={
+            handleCreateTimer
+          }
+
+          onUpdateTimer={
+            handleUpdateTimer
+          }
+
+          onDeleteTimer={
+            handleDeleteTimer
+          }
+
         />
 
-        {activeWorkspace === "chat" && (
-          <ChatWindow
-            tank={tank}
-            messages={messages}
-            onSendMessage={handleSendMessage}
-            currentUserId={userId}
-          />
-        )}
 
-        {activeWorkspace === "whiteboard" && (
-          <WhiteboardPanel
-            tankId={tank.id}
-            userId={userId}
-            events={whiteboards}
-            onCreateEvent={handleCreateWhiteboardEvent}
-            onClear={handleClearWhiteboard}
-          />
-        )}
+        {/* MAIN WORKSPACE */}
+
+        <div className="tank-main-workspace">
+
+
+          {activeWorkspace === "chat" && (
+
+            <ChatWindow
+
+              tank={tank}
+
+              messages={messages}
+
+              currentUserId={
+                currentUserId
+              }
+
+              onSendMessage={
+                handleSendMessage
+              }
+
+              onDeleteMessage={
+                handleDeleteMessage
+              }
+
+            />
+
+          )}
+
+
+          {activeWorkspace === "whiteboard" && (
+
+            <WhiteboardPanel
+
+              tank={tank}
+
+              whiteboards={
+                whiteboards
+              }
+
+              currentUserId={
+                currentUserId
+              }
+
+              onClear={
+                handleClearWhiteboard
+              }
+
+            />
+
+          )}
+
+        </div>
 
       </div>
 
     </main>
+
   );
+
 }
+
 
 export default TankPage;

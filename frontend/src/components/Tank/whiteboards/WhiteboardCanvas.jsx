@@ -3,7 +3,8 @@ import { useEffect, useRef } from "react";
 function WhiteboardCanvas({
   tool = "pen",
   events = [],
-  onDraw
+  onDraw,
+  clearSignal = 0
 }) {
   const canvasRef = useRef(null);
   const drawingRef = useRef(false);
@@ -11,22 +12,27 @@ function WhiteboardCanvas({
 
   useEffect(() => {
     resizeCanvas();
+
+    window.addEventListener("resize", resizeCanvas);
+
+    return () => {
+      window.removeEventListener("resize", resizeCanvas);
+    };
   }, []);
 
+  // Redraw when events change
   useEffect(() => {
     drawExistingEvents();
   }, [events]);
 
+  // Explicitly clear the actual canvas
   useEffect(() => {
-    window.addEventListener("resize", resizeCanvas);
+    if (clearSignal === 0) {
+      return;
+    }
 
-    return () => {
-      window.removeEventListener(
-        "resize",
-        resizeCanvas
-      );
-    };
-  }, []);
+    clearCanvas();
+  }, [clearSignal]);
 
   function resizeCanvas() {
     const canvas = canvasRef.current;
@@ -35,13 +41,9 @@ function WhiteboardCanvas({
       return;
     }
 
-    const rect =
-      canvas.getBoundingClientRect();
+    const rect = canvas.getBoundingClientRect();
 
-    if (
-      rect.width === 0 ||
-      rect.height === 0
-    ) {
+    if (rect.width === 0 || rect.height === 0) {
       return;
     }
 
@@ -49,6 +51,23 @@ function WhiteboardCanvas({
     canvas.height = rect.height;
 
     drawExistingEvents();
+  }
+
+  function clearCanvas() {
+    const canvas = canvasRef.current;
+
+    if (!canvas) {
+      return;
+    }
+
+    const context = canvas.getContext("2d");
+
+    context.clearRect(
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
   }
 
   function drawExistingEvents() {
@@ -73,8 +92,7 @@ function WhiteboardCanvas({
       }
 
       try {
-        const stroke =
-          JSON.parse(event.data);
+        const stroke = JSON.parse(event.data);
 
         drawStroke(
           context,
@@ -95,10 +113,7 @@ function WhiteboardCanvas({
     points,
     strokeTool
   ) {
-    if (
-      !points ||
-      points.length === 0
-    ) {
+    if (!points || points.length === 0) {
       return;
     }
 
@@ -133,9 +148,7 @@ function WhiteboardCanvas({
 
   function getPosition(event) {
     const canvas = canvasRef.current;
-
-    const rect =
-      canvas.getBoundingClientRect();
+    const rect = canvas.getBoundingClientRect();
 
     return {
       x: event.clientX - rect.left,
@@ -144,8 +157,7 @@ function WhiteboardCanvas({
   }
 
   function startDrawing(event) {
-    const position =
-      getPosition(event);
+    const position = getPosition(event);
 
     drawingRef.current = true;
 
@@ -157,6 +169,7 @@ function WhiteboardCanvas({
     const context = canvas.getContext("2d");
 
     context.beginPath();
+
     context.moveTo(
       position.x,
       position.y
@@ -172,12 +185,9 @@ function WhiteboardCanvas({
       return;
     }
 
-    const position =
-      getPosition(event);
+    const position = getPosition(event);
 
-    currentStrokeRef.current.push(
-      position
-    );
+    currentStrokeRef.current.push(position);
 
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
@@ -199,6 +209,7 @@ function WhiteboardCanvas({
     context.stroke();
 
     context.beginPath();
+
     context.moveTo(
       position.x,
       position.y
@@ -227,10 +238,7 @@ function WhiteboardCanvas({
 
     currentStrokeRef.current = [];
 
-    if (
-      points.length < 2 ||
-      !onDraw
-    ) {
+    if (points.length < 2 || !onDraw) {
       return;
     }
 
@@ -261,12 +269,6 @@ function WhiteboardCanvas({
       onPointerMove={draw}
       onPointerUp={stopDrawing}
       onPointerCancel={stopDrawing}
-      onPointerLeave={() => {
-        if (drawingRef.current) {
-          // Don't stop the stroke here.
-          // Pointer capture keeps drawing active.
-        }
-      }}
     />
   );
 }

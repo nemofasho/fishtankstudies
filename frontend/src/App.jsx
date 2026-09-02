@@ -12,6 +12,9 @@ import Navbar from "./components/Navbar";
 import CreateTank from "./pages/CreateTank";
 
 function App() {
+
+  const currentUserId = 1;
+
   return (
 
     <>
@@ -31,7 +34,7 @@ function App() {
 
       <Route
         path="/tanks/:tankId"
-        element={<TankPage />}
+        element={<TankPage currentUserId={1} />}
       />
 
       <Route

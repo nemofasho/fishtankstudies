@@ -13,7 +13,59 @@ function formatTime(seconds) {
     ).padStart(2, "0")}`;
 }
 
-function TimerSection({ timers = [] }) {
+function TimerSection({ timers = [], loading = false, error = "", onRetry }) {
+    if (loading) {
+        return (
+            <section className="workspace-section">
+                <div className="section-header">
+                    <h3>Timers</h3>
+                </div>
+
+                <p className="empty-section">
+                    Loading timers...
+                </p>
+            </section>
+        );
+    }
+    
+    if (error) {
+        return (
+            <section className="workspace-section">
+                <div className="section-header">
+                    <h3>Timers</h3>
+                </div>
+
+                <p className="empty-section">
+                    Unable to load timers.
+                </p>
+
+                {onRetry && (
+                    <button
+                        type="button"
+                        className="open-button"
+                        onClick={onRetry}
+                    >
+                        Retry
+                    </button>
+                )}
+            </section>
+        );
+    }
+
+    if (timers.length === 0) {
+        return (
+            <section className="workspace-section">
+                <div className="section-header">
+                    <h3>Timers</h3>
+                </div>
+
+                <p className="empty-section">
+                    No timers yet.
+                </p>
+            </section>
+        );
+    }
+    
     return (
         <section className="timer-section">
             <div className="workspace-section-header">

@@ -1,6 +1,58 @@
 import React from "react";
 
-function MemberList({ members = [] }) {
+function MemberList({ members = [], loading = false, error = "", onRetry }) {
+    if (loading) {
+        return (
+            <section className="workspace-section">
+                <div className="section-header">
+                    <h3>Members</h3>
+                </div>
+
+                <p className="empty-section">
+                    Loading members...
+                </p>
+            </section>
+        );
+    }
+    
+    if (error) {
+        return (
+            <section className="workspace-section">
+                <div className="section-header">
+                    <h3>Members</h3>
+                </div>
+
+                <p className="empty-section">
+                    Unable to load members.
+                </p>
+
+                {onRetry && (
+                    <button
+                        type="button"
+                        className="open-button"
+                        onClick={onRetry}
+                    >
+                        Retry
+                    </button>
+                )}
+            </section>
+        );
+    }
+
+    if (members.length === 0) {
+        return (
+            <section className="workspace-section">
+                <div className="section-header">
+                    <h3>Members</h3>
+                </div>
+
+                <p className="empty-section">
+                    No members yet.
+                </p>
+            </section>
+        );
+    }
+    
     return (
         <section className="member-section">
             <div className="workspace-section-header">
