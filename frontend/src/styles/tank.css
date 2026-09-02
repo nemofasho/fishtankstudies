@@ -671,6 +671,47 @@
   opacity: 0.5;
 }
 
+.message-input {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  width: 100%;
+}
+
+.message-input textarea {
+  flex: 1;
+  width: 100%;
+  resize: none;
+
+  min-height: 42px;
+  max-height: 120px;
+
+  padding: 11px 13px;
+
+  border: 1px solid #ccc;
+  border-radius: 10px;
+
+  box-sizing: border-box;
+
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.message-input button {
+  height: 42px;
+  flex-shrink: 0;
+
+  padding: 0 18px;
+
+  border: 1px solid #ccc;
+  border-radius: 8px;
+
+  background: transparent;
+
+  font-weight: 600;
+  cursor: pointer;
+}
+
 
 /* =========================
    Mobile

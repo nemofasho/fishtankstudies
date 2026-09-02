@@ -1,61 +1,114 @@
 import { useState } from "react";
 
+
 function MessageInput({
   onSubmit,
   disabled = false
 }) {
-  const [content, setContent] = useState("");
 
-  function handleSubmit(event) {
+  const [content, setContent] =
+    useState("");
+
+
+  function handleSubmit(
+    event
+  ) {
+
     event.preventDefault();
 
-    const trimmedContent = content.trim();
-
-    if (!trimmedContent || disabled) {
+    if (
+      disabled ||
+      !content.trim()
+    ) {
       return;
     }
 
-    onSubmit(trimmedContent);
+
+    onSubmit(
+      content.trim()
+    );
+
     setContent("");
+
   }
 
-  function handleKeyDown(event) {
+
+  function handleKeyDown(
+    event
+  ) {
+
     if (
       event.key === "Enter" &&
       !event.shiftKey
     ) {
+
       event.preventDefault();
+
       handleSubmit(event);
+
     }
+
   }
 
+
   return (
+
     <form
-      className="message-input-container"
-      onSubmit={handleSubmit}
+      className="message-input"
+      onSubmit={
+        handleSubmit
+      }
     >
+
       <textarea
+
         value={content}
-        onChange={(event) =>
-          setContent(event.target.value)
+
+        onChange={event =>
+          setContent(
+            event.target.value
+          )
         }
-        onKeyDown={handleKeyDown}
-        placeholder="Type a message..."
+
+        onKeyDown={
+          handleKeyDown
+        }
+
+        placeholder={
+          disabled
+            ? "Sending..."
+            : "Type a message..."
+        }
+
         disabled={disabled}
+
         rows={1}
+
       />
 
+
       <button
+
         type="submit"
-        className="send-button"
+
         disabled={
-          disabled || !content.trim()
+          disabled ||
+          !content.trim()
         }
+
       >
-        {disabled ? "Sending..." : "Send"}
+
+        {disabled
+          ? "Sending..."
+          : "Send"}
+
       </button>
+
     </form>
+
   );
+
 }
+
 
 export default MessageInput;

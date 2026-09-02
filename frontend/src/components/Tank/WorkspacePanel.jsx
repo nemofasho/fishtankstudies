@@ -1,86 +1,170 @@
 import React from "react";
 
-import TaskSection from "./Tasks/TaskSection";
-import TimerSection from "./Timers/TimerSection";
-import MemberList from "./Members/MemberList";
+import TaskSection from "./tasks/TaskSection";
+import TimerSection from "./timers/TimerSection";
+import MemberList from "./members/MemberList";
+
 
 function WorkspacePanel({
+
   tank,
+
   tasks = [],
+
   timers = [],
+
   members = [],
+
   whiteboards = [],
+
   activeWorkspace,
+
   setActiveWorkspace,
-  onTaskSelect
+
+  onTaskSelect,
+
+  onCreateTask,
+
+  onUpdateTask,
+
+  onDeleteTask,
+
+  onCreateTimer,
+
+  onUpdateTimer,
+
+  onDeleteTimer
+
 }) {
+
   return (
+
     <aside className="workspace-panel">
 
-      {/* Workspace Title */}
+
       <div className="workspace-title">
-        <h2>Workspace</h2>
+
+        <h2>
+          Workspace
+        </h2>
+
       </div>
 
-      {/* Tasks */}
+
+      {/* TASKS */}
+
       <TaskSection
+
         tasks={tasks}
-        onTaskSelect={onTaskSelect}
+
+        onTaskSelect={
+          onTaskSelect
+        }
+
+        onCreateTask={
+          onCreateTask
+        }
+
+        onUpdateTask={
+          onUpdateTask
+        }
+
+        onDeleteTask={
+          onDeleteTask
+        }
+
       />
 
-      {/* Timers */}
+
+      {/* TIMERS */}
+
       <TimerSection
+
         timers={timers}
+
+        onCreateTimer={
+          onCreateTimer
+        }
+
+        onUpdateTimer={
+          onUpdateTimer
+        }
+
+        onDeleteTimer={
+          onDeleteTimer
+        }
+
       />
 
-      {/* Members */}
+
+      {/* MEMBERS */}
+
       <MemberList
         members={members}
       />
 
-      {/* Whiteboard */}
+
+      {/* WHITEBOARD */}
+
       <section className="workspace-section">
 
         <div className="section-header">
-          <h3>Whiteboard</h3>
+
+          <h3>
+            Whiteboard
+          </h3>
 
           <span className="section-count">
             {whiteboards.length}
           </span>
+
         </div>
 
+
         {whiteboards.length === 0 ? (
+
           <p className="empty-section">
             No whiteboard activity yet.
           </p>
+
         ) : (
+
           <div className="whiteboard-list">
 
             <div className="whiteboard-item">
 
               <div className="whiteboard-info">
+
                 <span className="whiteboard-name">
                   Tank Whiteboard
                 </span>
 
                 <span className="whiteboard-date">
+
                   {whiteboards.length}{" "}
+
                   {whiteboards.length === 1
                     ? "event"
                     : "events"}
+
                 </span>
+
               </div>
 
             </div>
 
           </div>
+
         )}
+
 
         <button
           type="button"
           className="open-button"
           onClick={() =>
-            setActiveWorkspace("whiteboard")
+            setActiveWorkspace(
+              "whiteboard"
+            )
           }
         >
           Open Whiteboard
@@ -88,18 +172,27 @@ function WorkspacePanel({
 
       </section>
 
-      {/* Chat Button */}
+
+      {/* CHAT */}
+
       <section className="workspace-section">
 
         <div className="section-header">
-          <h3>Chat</h3>
+
+          <h3>
+            Chat
+          </h3>
+
         </div>
+
 
         <button
           type="button"
           className="open-button"
           onClick={() =>
-            setActiveWorkspace("chat")
+            setActiveWorkspace(
+              "chat"
+            )
           }
         >
           Open Chat
@@ -107,8 +200,12 @@ function WorkspacePanel({
 
       </section>
 
+
     </aside>
+
   );
+
 }
+
 
 export default WorkspacePanel;

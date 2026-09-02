@@ -3,389 +3,458 @@ import { useParams } from "react-router-dom";
 
 import TankHeader from "../components/TankHeader";
 import WorkspacePanel from "../components/Tank/WorkspacePanel";
-import ChatWindow from "../components/Tank/Chat/ChatWindow";
-import WhiteboardPanel from "../components/Tank/Whiteboards/WhiteboardPanel";
-
-import { getTank } from "../services/tankService";
-import { getTankTasks } from "../services/taskService";
-import { getTankMessages } from "../services/messageService";
+import ChatWindow from "../components/Tank/chat/ChatWindow";
+import WhiteboardPanel from "../components/Tank/whiteboards/WhiteboardPanel";
 
 import {
-  getTankTimers
+  getTank
+} from "../services/tankService";
+
+import {
+  getTankTasks,
+  createTask,
+  updateTask,
+  deleteTask
+} from "../services/taskService";
+
+import {
+  getTankMessages,
+  sendMessage,
+  deleteMessage
+} from "../services/messageService";
+
+import {
+  getTankTimers,
+  createTimer,
+  updateTimer,
+  deleteTimer
 } from "../services/timerSessionService";
 
 import {
   getTankWhiteboardEvents,
-  createWhiteboardEvent,
   clearWhiteboard
 } from "../services/whiteboardEventService";
 
 import "../styles/tank.css";
 
-function TankPage() {
+
+function TankPage({ currentUserId }) {
+
+  console.log("CURRENT USER ID:", currentUserId);
+
   const { tankId } = useParams();
 
-  /*
-   * =========================
-   * Tank
-   * =========================
-   */
+
+  /* =========================
+     Tank
+  ========================= */
 
   const [tank, setTank] = useState(null);
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
 
-
-  /*
-   * =========================
-   * Workspace Data
-   * =========================
-   */
+  /* =========================
+     Workspace Data
+  ========================= */
 
   const [tasks, setTasks] = useState([]);
+
   const [messages, setMessages] = useState([]);
+
   const [timers, setTimers] = useState([]);
-  const [whiteboards, setWhiteboards] = useState([]);
 
-  /*
-   * =========================
-   * Workspace Loading
-   * =========================
-   */
+  const [whiteboards, setWhiteboards] =
+    useState([]);
 
-  const [taskLoading, setTaskLoading] =
-    useState(true);
 
-  const [messageLoading, setMessageLoading] =
-    useState(true);
-
-  const [timerLoading, setTimerLoading] =
-    useState(true);
-
-  const [whiteboardLoading, setWhiteboardLoading] =
-    useState(true);
-
-  /*
-   * =========================
-   * Workspace Errors
-   * =========================
-   */
-
-  const [taskError, setTaskError] =
-    useState("");
-
-  const [messageError, setMessageError] =
-    useState("");
-
-  const [timerError, setTimerError] =
-    useState("");
-
-  const [whiteboardError, setWhiteboardError] =
-    useState("");
-
-  /*
-   * =========================
-   * Workspace Navigation
-   * =========================
-   */
+  /* =========================
+     Workspace
+  ========================= */
 
   const [activeWorkspace, setActiveWorkspace] =
     useState("chat");
 
 
-  /*
-   * =========================
-   * Current User
-   * =========================
-   *
-   * Replace this with your actual
-   * authentication/user context when
-   * that is implemented.
-   */
+  /* =========================
+     Loading
+  ========================= */
 
-  const userId = 1;
+  const [loading, setLoading] =
+    useState(true);
+
+  const [error, setError] =
+    useState("");
 
 
-  /*
-   * =========================
-   * Load Tank
-   * =========================
-   */
+  /* =========================
+     Load Tank
+  ========================= */
 
-  useEffect(() => {
-    async function loadTank() {
-      try {
-        setLoading(true);
-        setError("");
+  async function loadTankData() {
 
-        const tankData =
-          await getTank(tankId);
-
-        setTank(tankData);
-
-      } catch (err) {
-        console.error(
-          "Failed to load Tank:",
-          err
-        );
-
-        setError(
-          err.message ||
-          "Failed to load Tank."
-        );
-
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    loadTank();
-
-  }, [tankId]);
-
-
-  /*
-   * =========================
-   * Load Tasks
-   * =========================
-   */
-
-  useEffect(() => {
-    async function loadTasks() {
-      try {
-        setTaskLoading(true);
-        setTaskError("");
-
-        const data =
-          await getTankTasks(tankId);
-
-        setTasks(data || []);
-
-      } catch (err) {
-        console.error(
-          "Failed to load tasks:",
-          err
-        );
-
-        setTaskError(
-          err.message ||
-          "Failed to load tasks."
-        );
-
-      } finally {
-        setTaskLoading(false);
-      }
-    }
-
-    loadTasks();
-
-  }, [tankId]);
-
-
-  /*
-   * =========================
-   * Load Messages
-   * =========================
-   */
-
-  useEffect(() => {
-    async function loadMessages() {
-      try {
-        setMessageLoading(true);
-        setMessageError("");
-
-        const data =
-          await getTankMessages(tankId);
-
-        setMessages(data || []);
-
-      } catch (err) {
-        console.error(
-          "Failed to load messages:",
-          err
-        );
-
-        setMessageError(
-          err.message ||
-          "Failed to load messages."
-        );
-
-      } finally {
-        setMessageLoading(false);
-      }
-    }
-
-    loadMessages();
-
-  }, [tankId]);
-
-
-  /*
-   * =========================
-   * Load Timers
-   * =========================
-   */
-
-  useEffect(() => {
-    async function loadTimers() {
-      try {
-        setTimerLoading(true);
-        setTimerError("");
-
-        const data =
-          await getTankTimers(tankId);
-
-        setTimers(data || []);
-
-      } catch (err) {
-        console.error(
-          "Failed to load timers:",
-          err
-        );
-
-        setTimerError(
-          err.message ||
-          "Failed to load timers."
-        );
-
-      } finally {
-        setTimerLoading(false);
-      }
-    }
-
-    loadTimers();
-
-  }, [tankId]);
-
-
-  /*
-   * =========================
-   * Load Whiteboard
-   * =========================
-   */
-
-  useEffect(() => {
-    async function loadWhiteboard() {
-      try {
-        setWhiteboardLoading(true);
-        setWhiteboardError("");
-
-        const data =
-          await getTankWhiteboardEvents(
-            tankId
-          );
-
-        setWhiteboards(data || []);
-
-      } catch (err) {
-        console.error(
-          "Failed to load whiteboard:",
-          err
-        );
-
-        setWhiteboardError(
-          err.message ||
-          "Failed to load whiteboard."
-        );
-
-      } finally {
-        setWhiteboardLoading(false);
-      }
-    }
-
-    loadWhiteboard();
-
-  }, [tankId]);
-
-
-  /*
-   * =========================
-   * Send Message
-   * =========================
-   */
-
-  async function handleSendMessage(content) {
     try {
-      const { sendMessage } =
-        await import(
-          "../services/messageService"
+
+      setLoading(true);
+      setError("");
+
+      const [
+        tankData,
+        taskData,
+        messageData,
+        timerData,
+        whiteboardData
+      ] = await Promise.all([
+
+        getTank(tankId),
+
+        getTankTasks(tankId),
+
+        getTankMessages(tankId),
+
+        getTankTimers(tankId),
+
+        getTankWhiteboardEvents(tankId)
+
+      ]);
+
+
+      setTank(tankData);
+
+      setTasks(taskData || []);
+
+      setMessages(messageData || []);
+
+      setTimers(timerData || []);
+
+      setWhiteboards(
+        whiteboardData || []
+      );
+
+
+    } catch (err) {
+
+      console.error(
+        "Failed to load Tank:",
+        err
+      );
+
+      setError(
+        err.message ||
+        "Failed to load Tank data."
+      );
+
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  }
+
+
+  useEffect(() => {
+
+    loadTankData();
+
+  }, [tankId]);
+
+
+  /* =========================
+     TASK CRUD
+  ========================= */
+
+  async function handleCreateTask(
+    taskData
+  ) {
+
+    try {
+
+      const savedTask =
+        await createTask(
+          tank.id,
+          taskData
         );
 
-      const messageData = {
-        content
-      };
+      setTasks(previousTasks => [
+        ...previousTasks,
+        savedTask
+      ]);
+
+      return savedTask;
+
+    } catch (err) {
+
+      console.error(
+        "Failed to create task:",
+        err
+      );
+
+      throw err;
+
+    }
+
+  }
+
+
+  async function handleUpdateTask(
+    taskId,
+    taskData
+  ) {
+
+    try {
+
+      const updatedTask =
+        await updateTask(
+          taskId,
+          taskData
+        );
+
+      setTasks(previousTasks =>
+        previousTasks.map(task =>
+          task.id === updatedTask.id
+            ? updatedTask
+            : task
+        )
+      );
+
+      return updatedTask;
+
+    } catch (err) {
+
+      console.error(
+        "Failed to update task:",
+        err
+      );
+
+      throw err;
+
+    }
+
+  }
+
+
+  async function handleDeleteTask(
+    taskId
+  ) {
+
+    try {
+
+      await deleteTask(taskId);
+
+      setTasks(previousTasks =>
+        previousTasks.filter(
+          task => task.id !== taskId
+        )
+      );
+
+    } catch (err) {
+
+      console.error(
+        "Failed to delete task:",
+        err
+      );
+
+      throw err;
+
+    }
+
+  }
+
+
+  /* =========================
+     TIMER CRUD
+  ========================= */
+
+  async function handleCreateTimer(
+    timerData
+  ) {
+
+    try {
+
+      const savedTimer =
+        await createTimer(
+          tank.id,
+          timerData
+        );
+
+      setTimers(previousTimers => [
+        ...previousTimers,
+        savedTimer
+      ]);
+
+      return savedTimer;
+
+    } catch (err) {
+
+      console.error(
+        "Failed to create timer:",
+        err
+      );
+
+      throw err;
+
+    }
+
+  }
+
+
+  async function handleUpdateTimer(
+    timerId,
+    timerData
+  ) {
+
+    try {
+
+      const updatedTimer =
+        await updateTimer(
+          timerId,
+          timerData
+        );
+
+      setTimers(previousTimers =>
+        previousTimers.map(timer =>
+          timer.id === updatedTimer.id
+            ? updatedTimer
+            : timer
+        )
+      );
+
+      return updatedTimer;
+
+    } catch (err) {
+
+      console.error(
+        "Failed to update timer:",
+        err
+      );
+
+      throw err;
+
+    }
+
+  }
+
+
+  async function handleDeleteTimer(
+    timerId
+  ) {
+
+    try {
+
+      await deleteTimer(timerId);
+
+      setTimers(previousTimers =>
+        previousTimers.filter(
+          timer => timer.id !== timerId
+        )
+      );
+
+    } catch (err) {
+
+      console.error(
+        "Failed to delete timer:",
+        err
+      );
+
+      throw err;
+
+    }
+
+  }
+
+
+  /* =========================
+     MESSAGE CRUD
+  ========================= */
+
+  async function handleSendMessage(
+    content
+  ) {
+
+    if (!content?.trim()) {
+      return;
+    }
+
+    if (!currentUserId) {
+      throw new Error(
+        "Current user is not available."
+      );
+    }
+
+
+    try {
 
       const savedMessage =
         await sendMessage(
           tank.id,
-          userId,
-          messageData
+          currentUserId,
+          {
+            content: content.trim()
+          }
         );
 
-      setMessages(
-        (previousMessages) => [
-          ...previousMessages,
-          savedMessage
-        ]
-      );
+
+      setMessages(previousMessages => [
+        ...previousMessages,
+        savedMessage
+      ]);
+
+
+      return savedMessage;
 
     } catch (err) {
+
       console.error(
         "Failed to send message:",
         err
       );
 
       throw err;
+
     }
+
   }
 
 
-  /*
-   * =========================
-   * Create Whiteboard Event
-   * =========================
-   */
-
-  async function handleCreateWhiteboardEvent(
-    eventData
+  async function handleDeleteMessage(
+    messageId
   ) {
-    try {
-      const savedEvent =
-        await createWhiteboardEvent(
-          tank.id,
-          userId,
-          eventData
-        );
 
-      setWhiteboards(
-        (previousEvents) => [
-          ...previousEvents,
-          savedEvent
-        ]
+    try {
+
+      await deleteMessage(
+        messageId
       );
 
-      return savedEvent;
+      setMessages(previousMessages =>
+        previousMessages.filter(
+          message =>
+            message.id !== messageId
+        )
+      );
 
     } catch (err) {
+
       console.error(
-        "Failed to save whiteboard event:",
+        "Failed to delete message:",
         err
       );
 
       throw err;
+
     }
+
   }
 
 
-  /*
-   * =========================
-   * Clear Whiteboard
-   * =========================
-   */
+  /* =========================
+     WHITEBOARD
+  ========================= */
 
   async function handleClearWhiteboard() {
+
     try {
+
       await clearWhiteboard(
         tank.id
       );
@@ -393,24 +462,27 @@ function TankPage() {
       setWhiteboards([]);
 
     } catch (err) {
+
       console.error(
         "Failed to clear whiteboard:",
         err
       );
 
       throw err;
+
     }
+
   }
 
 
-  /*
-   * =========================
-   * Tank Loading
-   * =========================
-   */
+  /* =========================
+     Loading
+  ========================= */
 
   if (loading) {
+
     return (
+
       <main className="tank-page-state">
 
         <h2>
@@ -418,22 +490,24 @@ function TankPage() {
         </h2>
 
         <p>
-          Loading your Tank workspace.
+          Loading your workspace.
         </p>
 
       </main>
+
     );
+
   }
 
 
-  /*
-   * =========================
-   * Tank Error
-   * =========================
-   */
+  /* =========================
+     Error
+  ========================= */
 
   if (error) {
+
     return (
+
       <main className="tank-page-state">
 
         <h2>
@@ -446,66 +520,71 @@ function TankPage() {
 
         <button
           type="button"
-          onClick={() =>
-            window.location.reload()
-          }
+          onClick={loadTankData}
         >
           Try Again
         </button>
 
       </main>
+
     );
+
   }
 
 
-  /*
-   * =========================
-   * Tank Not Found
-   * =========================
-   */
+  /* =========================
+     Tank Not Found
+  ========================= */
 
   if (!tank) {
+
     return (
+
       <main className="tank-page-state">
 
         <h2>
           Tank not found
         </h2>
 
-        <p>
-          The Tank you're looking for
-          could not be found.
-        </p>
-
       </main>
+
     );
+
   }
 
 
-  /*
-   * =========================
-   * Tank Page
-   * =========================
-   */
+  /* =========================
+     PAGE
+  ========================= */
 
   return (
+
     <main className="tank-page">
 
       <TankHeader
         tank={tank}
       />
 
+
       <div className="tank-layout">
 
-        <WorkspacePanel
-          tank={tank}
 
-          tasks={tasks}
-          timers={timers}
-          whiteboards={whiteboards}
+        {/* LEFT PANEL */}
+
+        <WorkspacePanel
+
+          tank={tank}
 
           members={
             tank.members || []
+          }
+
+          tasks={tasks}
+
+          timers={timers}
+
+          whiteboards={
+            whiteboards
           }
 
           activeWorkspace={
@@ -516,81 +595,83 @@ function TankPage() {
             setActiveWorkspace
           }
 
-          taskLoading={
-            taskLoading
+          onCreateTask={
+            handleCreateTask
           }
 
-          taskError={
-            taskError
+          onUpdateTask={
+            handleUpdateTask
           }
 
-          timerLoading={
-            timerLoading
+          onDeleteTask={
+            handleDeleteTask
           }
 
-          timerError={
-            timerError
+          onCreateTimer={
+            handleCreateTimer
           }
 
-          onTaskSelect={
-            undefined
+          onUpdateTimer={
+            handleUpdateTimer
           }
+
+          onDeleteTimer={
+            handleDeleteTimer
+          }
+
         />
 
 
+        {/* MAIN WORKSPACE */}
+
         <div className="tank-main-workspace">
 
+
           {activeWorkspace === "chat" && (
+
             <ChatWindow
+
               tank={tank}
 
               messages={messages}
+
+              currentUserId={
+                currentUserId
+              }
 
               onSendMessage={
                 handleSendMessage
               }
 
-              currentUserId={
-                userId
+              onDeleteMessage={
+                handleDeleteMessage
               }
 
-              loading={
-                messageLoading
-              }
-
-              error={
-                messageError
-              }
             />
+
           )}
 
 
           {activeWorkspace === "whiteboard" && (
+
             <WhiteboardPanel
-              tankId={tank.id}
 
-              userId={userId}
+              tank={tank}
 
-              events={
+              whiteboards={
                 whiteboards
               }
 
-              onCreateEvent={
-                handleCreateWhiteboardEvent
+              currentUserId={
+                currentUserId
               }
 
               onClear={
                 handleClearWhiteboard
               }
 
-              loading={
-                whiteboardLoading
-              }
-
-              error={
-                whiteboardError
-              }
             />
+
           )}
 
         </div>
@@ -598,7 +679,10 @@ function TankPage() {
       </div>
 
     </main>
+
   );
+
 }
+
 
 export default TankPage;
