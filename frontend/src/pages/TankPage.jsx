@@ -5,6 +5,7 @@ import TankHeader from "../components/TankHeader";
 import WorkspacePanel from "../components/Tank/WorkspacePanel";
 import ChatWindow from "../components/Tank/chat/ChatWindow";
 import WhiteboardPanel from "../components/Tank/whiteboards/WhiteboardPanel";
+import TaskDetails from "../components/Tank/tasks/TaskDetails";
 
 import {
   getTank
@@ -72,6 +73,13 @@ function TankPage({ currentUserId }) {
 
   const [activeWorkspace, setActiveWorkspace] =
     useState("chat");
+
+  
+  const [selectedTaskId, setSelectedTaskId] =
+    useState(null);
+
+  const selectedTask =
+    tasks.find(task => task.id === selectedTaskId) || null;
 
 
   /* =========================
@@ -619,6 +627,12 @@ function TankPage({ currentUserId }) {
             handleDeleteTimer
           }
 
+          onTaskSelect={task => {
+            setSelectedTaskId(task.id);
+            setActiveWorkspace("task");
+        }}
+        selectedTaskId={selectedTaskId}
+
         />
 
 
@@ -626,6 +640,16 @@ function TankPage({ currentUserId }) {
 
         <div className="tank-main-workspace">
 
+
+          {activeWorkspace === "task" && (
+            <TaskDetails
+              task={selectedTask}
+              onClose={() => {
+                setSelectedTaskId(null);
+                setActiveWorkspace("chat");
+              }}
+            />
+          )}
 
           {activeWorkspace === "chat" && (
 

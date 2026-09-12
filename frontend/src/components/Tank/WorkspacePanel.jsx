@@ -23,6 +23,8 @@ function WorkspacePanel({
 
   onTaskSelect,
 
+  selectedTaskId,
+
   onCreateTask,
 
   onUpdateTask,
@@ -71,6 +73,10 @@ function WorkspacePanel({
 
         onDeleteTask={
           onDeleteTask
+        }
+
+        selectedTaskId={
+          selectedTaskId
         }
 
       />

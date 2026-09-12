@@ -1,324 +1,220 @@
-import { useState } from "react";
-
-import TaskForm from "../tasks/TaskForm";
+import { useMemo, useState } from "react";
+import TaskItem from "./TaskItem";
+import TaskForm from "./TaskForm";
 
 function TaskSection({
-
   tasks = [],
-
-  onTaskSelect,
-
   onCreateTask,
-
   onUpdateTask,
-
-  onDeleteTask
-
+  onDeleteTask,
+  onTaskSelect,
+  selectedTaskId
 }) {
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [filter, setFilter] = useState("all");
+  const [sort, setSort] = useState("default");
 
-  const [showForm, setShowForm] =
-    useState(false);
+  const filteredAndSortedTasks = useMemo(() => {
+    let result = [...tasks];
 
-  const [editingTask, setEditingTask] =
-    useState(null);
-
-
-  /* =========================
-     Create
-  ========================= */
-
-  async function handleCreate(
-    taskData
-  ) {
-
-    if (!onCreateTask) {
-      return;
+    // Filter tasks
+    if (filter === "completed") {
+      result = result.filter(task => task.completed);
     }
 
-    await onCreateTask(
-      taskData
-    );
-
-    setShowForm(false);
-
-  }
-
-
-  /* =========================
-     Edit
-  ========================= */
-
-  function handleEdit(task) {
-
-    setEditingTask(task);
-
-    setShowForm(false);
-
-  }
-
-
-  async function handleUpdate(
-    taskData
-  ) {
-
-    if (!onUpdateTask) {
-      return;
+    if (filter === "incomplete") {
+      result = result.filter(task => !task.completed);
     }
 
-    await onUpdateTask(
-      editingTask.id,
-      taskData
-    );
-
-    setEditingTask(null);
-
-  }
-
-
-  /* =========================
-     Complete
-  ========================= */
-
-  async function handleToggle(
-    task
-  ) {
-
-    if (!onUpdateTask) {
-      return;
-    }
-
-    await onUpdateTask(
-      task.id,
-      {
-        title: task.title,
-        description:
-          task.description || "",
-        dueDate:
-          task.dueDate || null,
-        completed:
-          !task.completed
-      }
-    );
-
-  }
-
-
-  /* =========================
-     Delete
-  ========================= */
-
-  async function handleDelete(
-    taskId
-  ) {
-
-    if (!onDeleteTask) {
-      return;
-    }
-
-    const confirmed =
-      window.confirm(
-        "Delete this task?"
+    // Sort tasks
+    if (sort === "title") {
+      result.sort((a, b) =>
+        (a.title || "").localeCompare(b.title || "")
       );
-
-    if (!confirmed) {
-      return;
     }
 
-    await onDeleteTask(
-      taskId
-    );
+    if (sort === "dueDate") {
+      result.sort((a, b) => {
+        const dateA = a.dueDate
+          ? new Date(a.dueDate).getTime()
+          : Infinity;
 
+        const dateB = b.dueDate
+          ? new Date(b.dueDate).getTime()
+          : Infinity;
+
+        return dateA - dateB;
+      });
+    }
+
+    if (sort === "status") {
+      result.sort((a, b) => {
+        if (a.completed === b.completed) {
+          return 0;
+        }
+
+        return a.completed ? 1 : -1;
+      });
+    }
+
+    return result;
+  }, [tasks, filter, sort]);
+
+  const completedCount = tasks.filter(
+    task => task.completed
+  ).length;
+
+  const incompleteCount =
+    tasks.length - completedCount;
+
+  async function handleCreateTask(taskData) {
+    if (!onCreateTask) return;
+
+    await onCreateTask(taskData);
+    setShowCreateModal(false);
   }
-
 
   return (
+    <>
+      <section className="workspace-section task-section">
+        <div className="section-header">
+          <div>
+            <h3>Tasks</h3>
 
-    <section className="workspace-section">
-
-
-      {/* HEADER */}
-
-      <div className="section-header">
-
-        <div>
-
-          <h3>
-            Tasks
-          </h3>
+            <span className="task-progress">
+              {completedCount} of {tasks.length} completed
+            </span>
+          </div>
 
           <span className="section-count">
             {tasks.length}
           </span>
-
         </div>
 
+        <div className="task-controls">
+          <select
+            value={filter}
+            onChange={event => setFilter(event.target.value)}
+            aria-label="Filter tasks"
+          >
+            <option value="all">
+              All ({tasks.length})
+            </option>
 
-        <button
-          type="button"
-          className="add-button"
-          onClick={() => {
+            <option value="incomplete">
+              Incomplete ({incompleteCount})
+            </option>
 
-            setEditingTask(null);
+            <option value="completed">
+              Completed ({completedCount})
+            </option>
+          </select>
 
-            setShowForm(
-              previous =>
-                !previous
-            );
+          <select
+            value={sort}
+            onChange={event => setSort(event.target.value)}
+            aria-label="Sort tasks"
+          >
+            <option value="default">
+              Sort: Default
+            </option>
 
+            <option value="dueDate">
+              Sort: Due Date
+            </option>
+
+            <option value="title">
+              Sort: Title
+            </option>
+
+            <option value="status">
+              Sort: Status
+            </option>
+          </select>
+        </div>
+
+        {filteredAndSortedTasks.length === 0 ? (
+          <div className="empty-section">
+            {tasks.length === 0 ? (
+              <>
+                <p>No tasks yet.</p>
+                <p>Create a task to get started.</p>
+              </>
+            ) : (
+              <p>No tasks match this filter.</p>
+            )}
+          </div>
+        ) : (
+          <div className="task-list">
+            {filteredAndSortedTasks.map(task => (
+              <TaskItem
+                key={task.id}
+                task={task}
+                onUpdate={onUpdateTask}
+                onDelete={onDeleteTask}
+                onSelect={onTaskSelect}
+                selected={task.id === selectedTaskId}
+              />
+            ))}
+          </div>
+        )}
+
+        {onCreateTask && (
+          <button
+            type="button"
+            className="add-button"
+            onClick={() => setShowCreateModal(true)}
+          >
+            + Add Task
+          </button>
+        )}
+      </section>
+
+      {showCreateModal && (
+        <div
+          className="task-modal-overlay"
+          onMouseDown={event => {
+            if (event.target === event.currentTarget) {
+              setShowCreateModal(false);
+            }
           }}
         >
-          {showForm ? "×" : "+"}
-        </button>
-
-      </div>
-
-
-      {/* CREATE FORM */}
-
-      {showForm && (
-
-        <TaskForm
-
-          onSubmit={
-            handleCreate
-          }
-
-          onCancel={() =>
-            setShowForm(false)
-          }
-
-        />
-
-      )}
-
-
-      {/* EDIT FORM */}
-
-      {editingTask && (
-
-        <TaskForm
-
-          initialTask={
-            editingTask
-          }
-
-          onSubmit={
-            handleUpdate
-          }
-
-          onCancel={() =>
-            setEditingTask(null)
-          }
-
-        />
-
-      )}
-
-
-      {/* TASKS */}
-
-      {tasks.length === 0 ? (
-
-        <p className="empty-section">
-          No tasks yet.
-        </p>
-
-      ) : (
-
-        <div className="task-list">
-
-          {tasks.map(task => (
-
-            <div
-              key={task.id}
-              className="task-item"
-            >
-
-              <input
-                type="checkbox"
-                checked={
-                  Boolean(
-                    task.completed
-                  )
-                }
-                onChange={() =>
-                  handleToggle(task)
-                }
-              />
-
-
-              <div className="task-content">
-
-                <span
-                  className={
-                    `task-title ${
-                      task.completed
-                        ? "completed"
-                        : ""
-                    }`
-                  }
-                  onClick={() => {
-
-                    if (onTaskSelect) {
-                      onTaskSelect(task);
-                    }
-
-                  }}
-                >
-                  {task.title}
+          <div
+            className="task-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="create-task-title"
+          >
+            <div className="task-modal-header">
+              <div>
+                <span className="task-details-label">
+                  New Task
                 </span>
 
-
-                {task.dueDate && (
-
-                  <span className="task-due-date">
-
-                    Due: {task.dueDate}
-
-                  </span>
-
-                )}
-
+                <h2 id="create-task-title">
+                  Create Task
+                </h2>
               </div>
 
-
-              <div className="task-actions">
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleEdit(task)
-                  }
-                >
-                  Edit
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    handleDelete(
-                      task.id
-                    )
-                  }
-                >
-                  Delete
-                </button>
-
-              </div>
-
+              <button
+                type="button"
+                className="task-details-close"
+                onClick={() => setShowCreateModal(false)}
+                aria-label="Close create task dialog"
+              >
+                ×
+              </button>
             </div>
 
-          ))}
-
+            <TaskForm
+              onSubmit={handleCreateTask}
+              onCancel={() => setShowCreateModal(false)}
+            />
+          </div>
         </div>
-
       )}
-
-    </section>
-
+    </>
   );
-
 }
-
 
 export default TaskSection;

@@ -781,3 +781,323 @@
     flex-direction: column;
     overflow: hidden;
 }
+
+
+.task-section .section-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.task-progress {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  opacity: 0.55;
+}
+
+.task-controls {
+  display: flex;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+.task-controls select {
+  flex: 1;
+  min-width: 0;
+  padding: 8px 9px;
+  border: 1px solid #ddd;
+  border-radius: 7px;
+  background: #fff;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.task-item {
+  position: relative;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.task-item:hover {
+  border-color: #bbb;
+  background: #fafafa;
+}
+
+.task-item:focus-visible {
+  outline: 2px solid #888;
+  outline-offset: 2px;
+}
+
+.task-item-selected {
+  border-color: #555;
+  background: #f7f7f7;
+}
+
+.task-item-selected::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 10px 0 0 10px;
+  background: #333;
+}
+
+.task-checkbox {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 1px solid #bbb;
+  border-radius: 5px;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+
+.task-checkbox.checked {
+  border-color: #555;
+  background: #555;
+  color: #fff;
+}
+
+.task-delete-button {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  opacity: 0.45;
+}
+
+.task-delete-button:hover {
+  opacity: 1;
+  background: #eee;
+}
+
+/* =========================
+   Task Details
+========================= */
+
+.task-details {
+  flex: 1;
+  min-width: 0;
+  overflow-y: auto;
+  padding: 32px;
+  background: #fff;
+}
+
+.task-details-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.task-details-empty h2 {
+  margin: 0 0 8px;
+  font-size: 22px;
+}
+
+.task-details-empty p {
+  margin: 0;
+  opacity: 0.6;
+}
+
+.task-details-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.task-details-label {
+  display: block;
+  margin-bottom: 7px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.5;
+}
+
+.task-details-header h2 {
+  margin: 0;
+  font-size: 26px;
+  line-height: 1.2;
+}
+
+.task-details-header h2.completed {
+  text-decoration: line-through;
+  opacity: 0.55;
+}
+
+.task-details-close {
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+}
+
+.task-details-close:hover {
+  background: #f5f5f5;
+}
+
+.task-details-status {
+  padding: 20px 0;
+}
+
+.task-status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.task-status-badge.completed {
+  background: #eee;
+  color: #444;
+}
+
+.task-status-badge.incomplete {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+}
+
+.task-details-section {
+  padding: 20px 0;
+  border-top: 1px solid #eee;
+}
+
+.task-details-section h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.55;
+}
+
+.task-details-section p {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+@media (max-width: 700px) {
+  .task-controls {
+    flex-direction: column;
+  }
+
+  .task-details {
+    padding: 22px;
+  }
+
+  .task-details-header h2 {
+    font-size: 21px;
+  }
+}
+
+/* =========================
+   Create Task Modal
+========================= */
+
+.task-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 24px;
+
+  background: rgba(0, 0, 0, 0.45);
+}
+
+.task-modal {
+  width: min(500px, 100%);
+  max-height: 90vh;
+  overflow-y: auto;
+
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+
+  padding: 24px;
+}
+
+.task-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+
+  margin-bottom: 20px;
+}
+
+.task-modal-header h2 {
+  margin: 4px 0 0;
+  font-size: 22px;
+}
+
+.task-modal .task-details-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.55;
+}
+
+.task-modal .task-details-close {
+  width: 32px;
+  height: 32px;
+
+  border: none;
+  background: transparent;
+
+  font-size: 24px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.task-modal .task-details-close:hover {
+  opacity: 0.6;
+}
+
+/* Keep the form from adding unnecessary outer spacing */
+.task-modal form {
+  width: 100%;
+}
+
