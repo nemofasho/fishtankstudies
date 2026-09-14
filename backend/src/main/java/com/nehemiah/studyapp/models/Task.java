@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import java.time.LocalDate;
 
 
 @Entity
@@ -25,6 +26,8 @@ public class Task {
     private String description;
 
     private boolean completed;
+
+    private LocalDate dueDate;
 
     @ManyToOne
     @JoinColumn(name = "tank_id")

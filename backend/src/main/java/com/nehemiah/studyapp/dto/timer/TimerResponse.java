@@ -9,9 +9,13 @@ public class TimerResponse {
 
     private Long id;
 
+    private String name;
+
     private int duration;
 
     private boolean active;
+
+    private long remainingSeconds;
 
     private Long tankId;
 }

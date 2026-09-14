@@ -11,7 +11,7 @@ export async function getTimer(timerId) {
 }
 
 export async function createTimer(tankId, timerData) {
-    return apiRequest(`${TIMERS_ENDPOINT}/tank/${tankId}`, {
+    return apiRequest(`${TIMERS_ENDPOINT}/${tankId}`, {
         method: "POST",
         body: JSON.stringify(timerData)
     });

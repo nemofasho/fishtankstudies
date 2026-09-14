@@ -3,6 +3,7 @@ package com.nehemiah.studyapp.Services;
 import com.nehemiah.studyapp.exception.ResourceNotFoundException;
 import com.nehemiah.studyapp.dto.message.MessageResponse;
 import com.nehemiah.studyapp.dto.message.SendMessageRequest;
+import com.nehemiah.studyapp.dto.message.UpdateMessageRequest;
 import com.nehemiah.studyapp.models.Message;
 import com.nehemiah.studyapp.models.Tank;
 import com.nehemiah.studyapp.models.User;
@@ -70,6 +71,27 @@ public class MessageService {
                 .stream()
                 .map(this::mapToResponse)
                 .toList();
+    }
+
+    public MessageResponse updateMessage(
+            Long messageId,
+            UpdateMessageRequest request) {
+
+        Message message =
+                messageRepository.findById(messageId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Message not found with id: "
+                                                + messageId));
+
+        message.setContent(
+                request.getContent().trim()
+        );
+
+        Message updatedMessage =
+                messageRepository.save(message);
+
+        return mapToResponse(updatedMessage);
     }
 
 

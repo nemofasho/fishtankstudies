@@ -52,6 +52,12 @@ function WorkspacePanel({
 
       </div>
 
+      {/* MEMBERS */}
+
+      <MemberList
+        members={members}
+      />
+
 
       {/* TASKS */}
 
@@ -100,13 +106,6 @@ function WorkspacePanel({
           onDeleteTimer
         }
 
-      />
-
-
-      {/* MEMBERS */}
-
-      <MemberList
-        members={members}
       />
 
 

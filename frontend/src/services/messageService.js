@@ -13,6 +13,13 @@ export async function sendMessage(tankId, userId, messageData) {
     });
 }
 
+export async function updateMessage(messageId, messageData) {
+    return apiRequest(`${MESSAGES_ENDPOINT}/${messageId}`, {
+        method: "PUT",
+        body: JSON.stringify(messageData)
+    });
+}
+
 export async function deleteMessage(messageId) {
     return apiRequest(`${MESSAGES_ENDPOINT}/${messageId}`, {
         method: "DELETE"

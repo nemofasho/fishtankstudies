@@ -3,6 +3,7 @@ package com.nehemiah.studyapp.Controllers;
 import com.nehemiah.studyapp.dto.message.MessageResponse;
 import com.nehemiah.studyapp.dto.message.SendMessageRequest;
 import com.nehemiah.studyapp.Services.MessageService;
+import com.nehemiah.studyapp.dto.message.UpdateMessageRequest;
 
 import jakarta.validation.Valid;
 
@@ -43,6 +44,16 @@ public class MessageController {
         return messageService.getTankMessages(tankId);
     }
 
+    @PutMapping("/{messageId}")
+    public MessageResponse updateMessage(
+            @PathVariable Long messageId,
+            @Valid @RequestBody UpdateMessageRequest request) {
+
+        return messageService.updateMessage(
+                messageId,
+                request
+        );
+    }
 
     @DeleteMapping("/{messageId}")
     public void deleteMessage(

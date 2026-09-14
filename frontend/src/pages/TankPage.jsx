@@ -21,6 +21,7 @@ import {
 import {
   getTankMessages,
   sendMessage,
+  updateMessage,
   deleteMessage
 } from "../services/messageService";
 
@@ -454,6 +455,42 @@ function TankPage({ currentUserId }) {
 
   }
 
+  async function handleEditMessage(
+  messageId,
+  content
+) {
+
+  try {
+
+    const updatedMessage =
+      await updateMessage(
+        messageId,
+        {
+          content
+        }
+      );
+
+    setMessages(previousMessages =>
+      previousMessages.map(message =>
+        message.id === updatedMessage.id
+          ? updatedMessage
+          : message
+      )
+    );
+
+    return updatedMessage;
+
+  } catch (err) {
+
+    console.error(
+      "Failed to edit message:",
+      err
+    );
+
+    throw err;
+  }
+}
+
 
   /* =========================
      WHITEBOARD
@@ -669,6 +706,10 @@ function TankPage({ currentUserId }) {
 
               onDeleteMessage={
                 handleDeleteMessage
+              }
+
+              onEditMessage={
+                handleEditMessage
               }
 
             />

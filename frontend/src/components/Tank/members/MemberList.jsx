@@ -1,6 +1,9 @@
-import React from "react";
-
-function MemberList({ members = [], loading = false, error = "", onRetry }) {
+function MemberList({
+    members = [],
+    loading = false,
+    error = "",
+    onRetry
+}) {
     if (loading) {
         return (
             <section className="workspace-section">
@@ -14,7 +17,7 @@ function MemberList({ members = [], loading = false, error = "", onRetry }) {
             </section>
         );
     }
-    
+
     if (error) {
         return (
             <section className="workspace-section">
@@ -39,34 +42,32 @@ function MemberList({ members = [], loading = false, error = "", onRetry }) {
         );
     }
 
-    if (members.length === 0) {
-        return (
-            <section className="workspace-section">
-                <div className="section-header">
+    return (
+        <section className="workspace-section member-section">
+            <div className="section-header">
+                <div>
                     <h3>Members</h3>
+
+                    <span className="task-progress">
+                        {members.length}{" "}
+                        {members.length === 1
+                            ? "member"
+                            : "members"}
+                    </span>
                 </div>
 
-                <p className="empty-section">
-                    No members yet.
-                </p>
-            </section>
-        );
-    }
-    
-    return (
-        <section className="member-section">
-            <div className="workspace-section-header">
-                <h2>Members</h2>
-                <span>{members.length}</span>
+                <span className="section-count">
+                    {members.length}
+                </span>
             </div>
 
             {members.length === 0 ? (
-                <p className="empty-state">
-                    No members to display.
+                <p className="empty-section">
+                    No members yet.
                 </p>
             ) : (
                 <div className="member-list">
-                    {members.map((member) => (
+                    {members.map(member => (
                         <div
                             key={member.id}
                             className="member-item"
@@ -79,14 +80,9 @@ function MemberList({ members = [], loading = false, error = "", onRetry }) {
 
                             <div className="member-info">
                                 <strong>
-                                    {member.username}
+                                    {member.username ||
+                                        "Unknown User"}
                                 </strong>
-
-                                {member.email && (
-                                    <small>
-                                        {member.email}
-                                    </small>
-                                )}
                             </div>
                         </div>
                     ))}

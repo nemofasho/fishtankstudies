@@ -12,12 +12,10 @@ function TaskDetails({ task, onClose }) {
     );
   }
 
-  const hasDueDate = task.dueDate || task.dueAt;
-
   let formattedDueDate = "No due date";
 
-  if (hasDueDate) {
-    const date = new Date(hasDueDate);
+  if (task.dueDate) {
+    const date = new Date(`${task.dueDate}T00:00:00`);
 
     if (!Number.isNaN(date.getTime())) {
       formattedDueDate = date.toLocaleDateString([], {

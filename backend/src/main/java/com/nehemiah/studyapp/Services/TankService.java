@@ -4,6 +4,7 @@ import com.nehemiah.studyapp.dto.tank.CreateTankRequest;
 import com.nehemiah.studyapp.dto.tank.UpdateTankRequest;
 import com.nehemiah.studyapp.exception.ResourceNotFoundException;
 import com.nehemiah.studyapp.dto.tank.TankResponse;
+import com.nehemiah.studyapp.dto.tank.MemberResponse;
 import com.nehemiah.studyapp.models.Tank;
 import com.nehemiah.studyapp.models.User;
 import com.nehemiah.studyapp.Repositories.TankRepository;
@@ -104,13 +105,37 @@ public class TankService {
         response.setClassName(tank.getClassName());
 
         response.setMemberCount(
-                tank.getMembers() == null ? 0 : tank.getMembers().size()
+                tank.getMembers() == null
+                        ? 0
+                        : tank.getMembers().size()
         );
 
         response.setTaskCount(
-                tank.getTasks() == null ? 0 : tank.getTasks().size()
+                tank.getTasks() == null
+                        ? 0
+                        : tank.getTasks().size()
         );
 
+        List<MemberResponse> members =
+                tank.getMembers() == null
+                        ? List.of()
+                        : tank.getMembers()
+                                .stream()
+                                .map(user -> {
+                                        MemberResponse member =
+                                                new MemberResponse();
+
+                                        member.setId(user.getId());
+                                        member.setUsername(
+                                                user.getUsername()
+                                        );
+
+                                        return member;
+                                })
+                                .toList();
+
+        response.setMembers(members);
+
         return response;
-    }
+        }
 }
