@@ -17,6 +17,8 @@ function WorkspacePanel({
 
   whiteboards = [],
 
+  documents = [],
+
   activeWorkspace,
 
   setActiveWorkspace,
@@ -168,11 +170,11 @@ function WorkspacePanel({
           className="open-button"
           onClick={() =>
             setActiveWorkspace(
-              "whiteboard"
+              "documents"
             )
           }
         >
-          Open Whiteboard
+          Shared Notes
         </button>
 
       </section>
