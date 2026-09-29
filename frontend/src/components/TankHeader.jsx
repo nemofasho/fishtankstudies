@@ -16,6 +16,7 @@ function TankHeader({ tank }) {
 
                 <div className="tank-header-info">
                     <span>{tank.subject}</span>
+                    <span>       </span>
                     <span>{tank.className}</span>
                 </div>
             </div>
@@ -23,12 +24,12 @@ function TankHeader({ tank }) {
             <div className="tank-stats">
                 <div>
                     <strong>{tank.taskCount}</strong>
-                    <span>Tasks</span>
+                    <span> Tasks</span>
                 </div>
 
                 <div>
                     <strong>{tank.memberCount}</strong>
-                    <span>Members</span>
+                    <span> Members</span>
                 </div>
             </div>
         </header>

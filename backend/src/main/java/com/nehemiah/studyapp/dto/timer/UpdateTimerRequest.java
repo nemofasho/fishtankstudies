@@ -8,6 +8,8 @@ import lombok.Setter;
 @Setter
 public class UpdateTimerRequest {
 
+    private String name;
+
     @Min(value = 1, message = "Duration must be at least 1 minute")
     private int duration;
 

@@ -1,21 +1,19 @@
 package com.nehemiah.studyapp.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import java.time.LocalDate;
 
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Task {
+public class Document {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,14 +21,14 @@ public class Task {
 
     private String title;
 
-    private String description;
+    @Column(columnDefinition = "TEXT")
+    private String content;
 
-    private boolean completed;
+    private LocalDateTime createdAt;
 
-    private LocalDate dueDate;
+    private LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "tank_id")
-    @JsonBackReference
     private Tank tank;
 }

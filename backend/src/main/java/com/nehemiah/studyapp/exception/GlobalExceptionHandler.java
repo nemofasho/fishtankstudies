@@ -94,16 +94,17 @@ public class GlobalExceptionHandler {
 
 
     // 500 - UNEXPECTED SERVER ERRORS
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorResponse> handleGeneralException(
-            Exception exception,
-            HttpServletRequest request) {
+        @ExceptionHandler(Exception.class)
+        public ResponseEntity<ErrorResponse> handleGeneralException(
+                Exception exception,
+                HttpServletRequest request) {
+
 
         ErrorResponse error = new ErrorResponse(
                 LocalDateTime.now(),
                 HttpStatus.INTERNAL_SERVER_ERROR.value(),
                 HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase(),
-                "An unexpected error occurred",
+                "An unexpected error occurred: " + exception.getMessage(),
                 request.getRequestURI(),
                 null
         );
@@ -112,5 +113,5 @@ public class GlobalExceptionHandler {
                 error,
                 HttpStatus.INTERNAL_SERVER_ERROR
         );
-    }
+        }
 }

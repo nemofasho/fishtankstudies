@@ -8,7 +8,7 @@ function MemberItem({ member }) {
       />
 
       <span className="member-name">
-        {member.name}
+        {member.username}
       </span>
     </div>
   );

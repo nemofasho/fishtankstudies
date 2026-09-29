@@ -20,7 +20,11 @@ public class TimerSession {
 
     private int duration; // Duration in minutes
 
+    private String name;
+
     private boolean active;
+
+    private long remainingSeconds;
     
     private LocalDateTime startTime;
 
