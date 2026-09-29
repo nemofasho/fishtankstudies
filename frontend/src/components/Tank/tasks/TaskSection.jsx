@@ -86,9 +86,19 @@ function TaskSection({
             </span>
           </div>
 
-          <span className="section-count">
-            {tasks.length}
-          </span>
+          <div className="section-header-actions">
+            {onCreateTask && (
+              <button
+                type="button"
+                className="section-add-button"
+                onClick={() => setShowCreateModal(true)}
+                title="Add task"
+                aria-label="Add task"
+              >
+                +
+              </button>
+            )}
+          </div>
         </div>
 
         <div className="task-controls">
@@ -157,16 +167,6 @@ function TaskSection({
               />
             ))}
           </div>
-        )}
-
-        {onCreateTask && (
-          <button
-            type="button"
-            className="add-button"
-            onClick={() => setShowCreateModal(true)}
-          >
-            + Add Task
-          </button>
         )}
       </section>
 

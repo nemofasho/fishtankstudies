@@ -20,6 +20,10 @@
 
     border-bottom: 1px solid #ddd;
 
+    background: var(--tank-background);
+
+    color: var(--tank-text);
+
 }
 
 .back-button {
@@ -66,7 +70,9 @@
 
     padding: 20px;
 
-    background: #fafafa;
+    background: var(--tank-background);
+
+    color: var(--tank-text);
 
 }
 
@@ -96,6 +102,36 @@
 
 }
 
+.section-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.section-add-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #64748b;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.section-add-button:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
 .placeholder-list {
 
     display: flex;
@@ -117,6 +153,10 @@
     padding: 8px;
 
     cursor: pointer;
+
+    color: var(--tank-text);
+    background: transparent;
+    border-color: var(--tank-border);
 
 }
 
@@ -158,7 +198,12 @@
 .workspace-section {
   padding-bottom: 20px;
   margin-bottom: 20px;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid var(--tank-border);
+}
+
+.workspace-section h3,
+.workspace-title h2 {
+  color: var(--tank-text);
 }
 
 .workspace-section:last-child {
@@ -198,7 +243,7 @@
 }
 
 .add-button:hover {
-  background: #eee;
+  background: var(--tank-surface);
 }
 
 
@@ -225,7 +270,7 @@
 }
 
 .member-item:hover {
-  background: #eee;
+  background: var(--tank-surface);
 }
 
 .member-status {
@@ -359,6 +404,33 @@
   font-weight: 600;
 }
 
+.timer-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.timer-add-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #64748b;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.timer-add-button:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
 
 /* =========================
    Whiteboards
@@ -417,7 +489,7 @@
 }
 
 .open-button:hover {
-  background: #eee;
+  background: var(--tank-surface);
 }
 
 
@@ -446,7 +518,9 @@
   display: flex;
   flex-direction: column;
 
-  background: #fff;
+  background: var(--tank-background);
+
+  color: var(--tank-text);
 
   overflow: hidden;
 }
@@ -462,7 +536,11 @@
 
   padding: 18px 24px;
 
-  border-bottom: 1px solid #ddd;
+  background: var(--tank-background);
+
+  color: var(--tank-text);
+
+  border-bottom: 1px solid var(--tank-border);
 
   flex-shrink: 0;
 }
@@ -518,6 +596,9 @@
   flex-direction: column;
 
   gap: 16px;
+
+  background: var(--tank-background);
+  color: var(--tank-text);
 }
 
 
@@ -672,10 +753,13 @@
 }
 
 .message-input {
-  display: flex;
-  align-items: flex-end;
-  gap: 10px;
-  width: 100%;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    flex-shrink: 0;
+
+    border-top: 1px solid var(--tank-border);
+    background: var(--tank-background);
 }
 
 .message-input textarea {
@@ -688,8 +772,11 @@
 
   padding: 11px 13px;
 
-  border: 1px solid #ccc;
+  border: 1px solid var(--tank-border);
   border-radius: 10px;
+
+  background: var(--tank-surface);
+  color: var(--tank-text);
 
   box-sizing: border-box;
 
@@ -703,7 +790,7 @@
 
   padding: 0 18px;
 
-  border: 1px solid #ccc;
+  border: 1px solid var(--tank-border);
   border-radius: 8px;
 
   background: transparent;
@@ -797,6 +884,11 @@
   opacity: 0.55;
 }
 
+.task-progress,
+.section-count {
+  color: var(--tank-text-muted);
+}
+
 .task-controls {
   display: flex;
   gap: 8px;
@@ -807,9 +899,10 @@
   flex: 1;
   min-width: 0;
   padding: 8px 9px;
-  border: 1px solid #ddd;
+  border: 1px solid var(--tank-border);
   border-radius: 7px;
-  background: #fff;
+  background: var(--tank-surface);
+  color: var(--tank-text);
   font-family: inherit;
   font-size: 12px;
   cursor: pointer;
@@ -897,7 +990,7 @@
   min-width: 0;
   overflow-y: auto;
   padding: 32px;
-  background: #fff;
+  background: var(--tank-background);
 }
 
 .task-details-empty {
@@ -1048,8 +1141,8 @@
   max-height: 90vh;
   overflow-y: auto;
 
-  background: #fff;
-  border: 1px solid #ddd;
+  background: var(--tank-background);
+  border: 1px solid var(--tank-border);
   border-radius: 14px;
 
   box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
@@ -1077,6 +1170,11 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   opacity: 0.55;
+}
+
+.task-modal-header h2,
+.task-modal-header .task-details-label {
+  color: var(--tank-text);
 }
 
 .task-modal .task-details-close {
@@ -1185,6 +1283,14 @@
 .timer-form-field label {
   font-size: 14px;
   font-weight: 600;
+  color: var(--tank-text);
+}
+
+.timer-form-field input,
+.timer-form-field select {
+  background: var(--tank-surface);
+  color: var(--tank-text);
+  border-color: var(--tank-border);
 }
 
 .timer-duration-input {
@@ -1332,28 +1438,23 @@
 }
 
 .message-menu {
-    display: none;
-
     position: absolute;
-    top: 28px;
+    top: calc(100% + 4px);
     right: 0;
 
-    min-width: 110px;
+    min-width: 120px;
 
-    background: white;
-    border: 1px solid #ddd;
-    border-radius: 6px;
+    padding: 4px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
 
     box-shadow:
-        0 4px 12px rgba(0, 0, 0, 0.15);
+        0 8px 20px rgba(0, 0, 0, 0.12);
 
-    overflow: hidden;
-
-    z-index: 100;
-}
-
-.message-menu.open {
-    display: block;
+    z-index: 1000;
 }
 
 .message-menu button {
@@ -1361,24 +1462,32 @@
 
     width: 100%;
 
-    border: none;
-    background: white;
+    padding: 8px 10px;
 
-    padding: 9px 12px;
+    border: none;
+    border-radius: 5px;
+
+    background: transparent;
+
+    color: #334155;
 
     text-align: left;
 
-    cursor: pointer;
+    font-size: 13px;
 
-    font-size: 14px;
+    cursor: pointer;
 }
 
 .message-menu button:hover {
-    background: #f3f3f3;
+    background: #f1f5f9;
 }
 
-.message-menu-delete {
-    color: #d33 !important;
+.message-menu .message-delete-option {
+    color: #dc2626;
+}
+
+.message-menu .message-delete-option:hover {
+    background: #fef2f2;
 }
 
 /* =========================================
@@ -1954,4 +2063,1555 @@
   position: absolute;
   left: 16px;
   top: 12px;
+}
+
+/* =========================
+   CHAT ATTACHMENTS
+========================= */
+
+.message-file-input {
+  display: none;
+}
+
+.message-input-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.message-attachment-preview-list {
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  box-sizing: border-box;
+  gap: 8px;
+  padding: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.message-attachment-preview {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 220px;
+  padding: 8px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+}
+
+.message-attachment-preview-media {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 6px;
+  background: #e2e8f0;
+}
+
+.message-attachment-preview-media img,
+.message-attachment-preview-media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.message-attachment-preview-info {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.message-attachment-preview-info span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.message-attachment-preview-info small {
+  color: #64748b;
+  font-size: 11px;
+}
+
+.message-attachment-remove {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border: none;
+  border-radius: 50%;
+  background: #e2e8f0;
+  color: #475569;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.message-attachment-remove:hover {
+  background: #cbd5e1;
+  color: #0f172a;
+}
+
+.message-attachment-error {
+  padding: 6px 10px;
+  color: #b91c1c;
+  background: #fef2f2;
+  border-top: 1px solid #fecaca;
+  border-bottom: 1px solid #fecaca;
+  font-size: 13px;
+}
+
+.message-attach-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  flex: 0 0 40px;
+
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--tank-text);
+
+  font-size: 20px;
+}
+
+.message-input-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    width: 100%;
+    min-width: 0;
+
+    gap: 8px;
+
+    padding: 12px 16px;
+
+    box-sizing: border-box;
+}
+
+.message-input-main textarea::placeholder {
+  color: var(--tank-text-muted);
+}
+
+.message-input-main textarea:focus {
+  border-color: #6b7280;
+}
+
+.message-attach-button:hover {
+  background: var(--tank-surface);
+  border-radius: 6px;
+}
+
+
+/* =========================
+   SENT ATTACHMENTS
+========================= */
+
+.message-attachments {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.message-image-attachment {
+  display: block;
+  max-width: 320px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.message-image-attachment img {
+  display: block;
+  width: 100%;
+  max-height: 320px;
+  object-fit: cover;
+}
+
+.message-video-attachment {
+  width: min(400px, 100%);
+}
+
+.message-video-attachment video {
+  display: block;
+  width: 100%;
+  max-height: 320px;
+  border-radius: 8px;
+}
+
+.message-attachment-name {
+  display: block;
+  margin-top: 4px;
+  color: #475569;
+  font-size: 12px;
+  text-decoration: none;
+}
+
+.message-attachment-name:hover {
+  text-decoration: underline;
+}
+
+.message-file-attachment {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  width: min(360px, 100%);
+
+  padding: 10px 12px;
+
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+
+  background: #f8fafc;
+
+  color: #334155;
+  text-decoration: none;
+}
+
+.message-file-attachment:hover {
+  background: #f1f5f9;
+}
+
+.message-file-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 36px;
+  height: 36px;
+
+  flex-shrink: 0;
+
+  font-size: 20px;
+}
+
+.message-file-details {
+  min-width: 0;
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.message-file-details strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.message-file-details small {
+  color: #64748b;
+  font-size: 11px;
+}
+
+.message-file-download {
+  font-size: 18px;
+  color: #64748b;
+}
+
+/* =========================
+   CHAT MESSAGES
+   ========================= */
+
+.message-list {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 16px;
+}
+
+.message {
+    display: flex;
+    width: 100%;
+    margin-bottom: 12px;
+}
+
+.message-own {
+    justify-content: flex-end;
+}
+
+.message-other {
+    justify-content: flex-start;
+}
+
+.message-content-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-width: 75%;
+}
+
+.message-own .message-content-wrapper {
+    align-items: flex-end;
+}
+
+.message-other .message-content-wrapper {
+    align-items: flex-start;
+}
+
+.message-sender {
+    margin-bottom: 4px;
+    color: #64748b;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.message-send-button {
+  color: var(--tank-text);
+  border-color: var(--tank-border);
+  background: transparent;
+}
+
+.message-send-button:hover:not(:disabled) {
+  background: var(--tank-surface);
+}
+/* The actual message box */
+
+.message-bubble-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.message-bubble {
+    position: relative;
+    min-width: 40px;
+    max-width: 100%;
+    padding: 10px 14px;
+    border-radius: 14px;
+    background: #f1f5f9;
+    color: #1e293b;
+    word-wrap: break-word;
+    overflow-wrap: anywhere;
+}
+
+.message-own .message-bubble {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.message-text {
+    white-space: pre-wrap;
+    line-height: 1.45;
+}
+
+.message-timestamp {
+    margin-top: 4px;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+/* =========================
+   MESSAGE THREE-DOT MENU
+   ========================= */
+
+.message-menu-container {
+    position: relative;
+    flex-shrink: 0;
+}
+
+.message-menu-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 28px;
+    height: 28px;
+
+    padding: 0;
+
+    border: none;
+    border-radius: 6px;
+
+    background: transparent;
+    color: #64748b;
+
+    cursor: pointer;
+
+    font-size: 20px;
+    line-height: 1;
+
+    opacity: 0;
+
+    transition:
+        background-color 0.15s ease,
+        color 0.15s ease,
+        opacity 0.15s ease;
+}
+
+/* Show the dots when hovering over your message */
+
+.message-own:hover .message-menu-button {
+    opacity: 1;
+}
+
+.message-menu-button:hover {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+/* The dropdown */
+
+.message-menu {
+    position: absolute;
+
+    top: calc(100% + 4px);
+    right: 0;
+
+    min-width: 120px;
+
+    padding: 4px;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+
+    box-shadow:
+        0 8px 20px rgba(0, 0, 0, 0.12);
+
+    z-index: 1000;
+}
+
+.message-menu button {
+    display: block;
+
+    width: 100%;
+
+    padding: 8px 10px;
+
+    border: none;
+    border-radius: 5px;
+
+    background: transparent;
+
+    color: #334155;
+
+    text-align: left;
+
+    font-size: 13px;
+
+    cursor: pointer;
+}
+
+.message-menu button:hover {
+    background: #f1f5f9;
+}
+
+.message-menu .message-delete-option {
+    color: #dc2626;
+}
+
+.message-menu .message-delete-option:hover {
+    background: #fef2f2;
+}
+
+/* =========================
+   MESSAGE EDITING
+   ========================= */
+
+.message-edit-container {
+    width: min(400px, 100%);
+    padding: 8px;
+
+    background: #ffffff;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 10px;
+
+    box-shadow:
+        0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.message-edit-container textarea {
+    display: block;
+
+    width: 100%;
+    min-height: 80px;
+
+    padding: 8px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+
+    resize: vertical;
+
+    font-family: inherit;
+    font-size: 14px;
+
+    outline: none;
+}
+
+.message-edit-container textarea:focus {
+    border-color: #94a3b8;
+}
+
+.message-edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+
+    margin-top: 8px;
+}
+
+.message-edit-actions button {
+    padding: 6px 10px;
+
+    border: none;
+    border-radius: 5px;
+
+    cursor: pointer;
+
+    font-size: 13px;
+}
+
+.message-edit-actions button:first-child {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.message-edit-actions button:last-child {
+    background: #2563eb;
+    color: #ffffff;
+}
+
+.message-edit-actions button:last-child:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* =========================
+   ATTACHMENTS INSIDE MESSAGES
+   ========================= */
+
+.message-attachments {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+/*
+   If a message contains only an attachment,
+   remove the extra spacing.
+*/
+
+.message-bubble:has(.message-attachments:only-child) {
+    padding: 6px;
+}
+
+/* Images */
+
+.message-image-attachment {
+    display: block;
+
+    max-width: 320px;
+
+    border-radius: 8px;
+
+    overflow: hidden;
+
+    text-decoration: none;
+}
+
+.message-image-attachment img {
+    display: block;
+
+    width: 100%;
+    max-height: 320px;
+
+    object-fit: cover;
+}
+
+/* Videos */
+
+.message-video-attachment {
+    width: min(400px, 100%);
+}
+
+.message-video-attachment video {
+    display: block;
+
+    width: 100%;
+    max-height: 320px;
+
+    border-radius: 8px;
+
+    background: #000000;
+}
+
+.message-attachment-name {
+    display: block;
+
+    margin-top: 4px;
+
+    color: #475569;
+
+    font-size: 12px;
+
+    text-decoration: none;
+}
+
+.message-attachment-name:hover {
+    text-decoration: underline;
+}
+
+/* Files */
+
+.message-file-attachment {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+
+    width: min(360px, 100%);
+
+    padding: 10px 12px;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+
+    background: #f8fafc;
+
+    color: #334155;
+
+    text-decoration: none;
+}
+
+.message-file-attachment:hover {
+    background: #f1f5f9;
+}
+
+.message-file-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 36px;
+    height: 36px;
+
+    flex-shrink: 0;
+
+    font-size: 20px;
+}
+
+.message-file-details {
+    min-width: 0;
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+.message-file-details strong {
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.message-file-details small {
+    color: #64748b;
+
+    font-size: 11px;
+}
+
+.message-file-download {
+    color: #64748b;
+
+    font-size: 18px;
+}
+
+.task-create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.task-form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.task-form-field label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--tank-text);
+}
+
+.task-form-field input,
+.task-form-field textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: var(--tank-background);
+  color: var(--tank-text);
+  border-color: var(--tank-border);
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+}
+
+.task-form-field input:focus,
+.task-form-field textarea:focus {
+  border-color: var(--tank-border);
+}
+
+.task-form-field textarea {
+  min-height: 90px;
+  resize: vertical;
+}
+
+.task-form-field input::placeholder,
+.task-form-field textarea::placeholder,
+.timer-form-field input::placeholder {
+  color: var(--tank-text-muted);
+}
+
+
+
+.task-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.task-cancel-button,
+.task-create-button {
+  padding: 9px 16px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.task-cancel-button {
+  border: 1px solid #d1d5db;
+  background: #ffffff;
+  color: #374151;
+}
+
+.task-cancel-button:hover:not(:disabled) {
+  background: #f8fafc;
+}
+
+.task-create-button {
+  border: 1px solid #d1d5db;
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.task-create-button:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.task-cancel-button:disabled,
+.task-create-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* =========================================================
+   STUDYSYNC DARK TANK THEME
+   Added/updated dark-theme overrides
+   ========================================================= */
+
+:root {
+  --tank-background: #111827;
+  --tank-surface: #1f2937;
+  --tank-border: #374151;
+  --tank-text: #f9fafb;
+  --tank-text-muted: #9ca3af;
+}
+
+/* =========================================================
+   TANK / WORKSPACE
+   ========================================================= */
+
+.tank-header {
+  background: var(--tank-background);
+  color: var(--tank-text);
+  border-color: var(--tank-border);
+}
+
+.tank-info h1,
+.tank-info p,
+.back-button {
+  color: var(--tank-text);
+}
+
+.tank-info p {
+  color: var(--tank-text-muted);
+}
+
+.workspace-panel {
+  background: var(--tank-background);
+  color: var(--tank-text);
+  border-color: var(--tank-border);
+}
+
+.workspace-section {
+  border-bottom-color: var(--tank-border);
+}
+
+.workspace-section h3,
+.workspace-title h2,
+.member-name,
+.task-title,
+.timer-name,
+.timer-time {
+  color: var(--tank-text);
+}
+
+.task-progress,
+.section-count,
+.timer-status,
+.empty-section {
+  color: var(--tank-text-muted);
+}
+
+/* Workspace buttons */
+
+.section-add-button,
+.timer-add-button {
+  color: var(--tank-text-muted);
+}
+
+.section-add-button:hover,
+.timer-add-button:hover {
+  background: var(--tank-surface);
+  color: var(--tank-text);
+}
+
+.open-button {
+  color: var(--tank-text);
+  background: transparent;
+  border-color: var(--tank-border);
+}
+
+.open-button:hover {
+  background: var(--tank-surface);
+  color: var(--tank-text);
+}
+
+/* =========================================================
+   MEMBERS
+   ========================================================= */
+
+.member-item:hover {
+  background: var(--tank-surface);
+}
+
+/* =========================================================
+   TASKS
+   ========================================================= */
+
+.task-item {
+  color: var(--tank-text);
+  border-color: transparent;
+}
+
+.task-item:hover {
+  background: var(--tank-surface);
+  border-color: var(--tank-border);
+}
+
+.task-item-selected {
+  background: var(--tank-surface);
+  border-color: #4b5563;
+  color: var(--tank-text);
+}
+
+.task-item-selected::before {
+  background: #9ca3af;
+}
+
+.task-item-selected .task-title,
+.task-item-selected .task-content,
+.task-item-selected .task-due-date {
+  color: var(--tank-text);
+}
+
+.task-item-selected .task-due-date {
+  color: var(--tank-text-muted);
+}
+
+.task-checkbox {
+  background: var(--tank-surface);
+  border-color: #6b7280;
+  color: var(--tank-text);
+}
+
+.task-checkbox.checked {
+  background: #4b5563;
+  border-color: #6b7280;
+  color: #ffffff;
+}
+
+.task-delete-button {
+  color: #fca5a5;
+}
+
+.task-delete-button:hover {
+  background: #450a0a;
+  color: #fecaca;
+}
+
+/* Task filters */
+
+.task-controls select {
+  background: var(--tank-surface);
+  color: var(--tank-text);
+  border-color: var(--tank-border);
+}
+
+.task-controls select option {
+  background: var(--tank-surface);
+  color: var(--tank-text);
+}
+
+/* =========================================================
+   TIMERS
+   ========================================================= */
+
+.timer-item {
+  background: var(--tank-surface);
+  border-color: var(--tank-border);
+  color: var(--tank-text);
+}
+
+.timer-name,
+.timer-time {
+  color: var(--tank-text);
+}
+
+.timer-status {
+  color: var(--tank-text-muted);
+}
+
+/* Timer action buttons */
+
+.timer-action-button,
+.timer-delete-button {
+  background: transparent;
+  border-color: var(--tank-border);
+  color: var(--tank-text);
+}
+
+.timer-action-button:hover {
+  background: #374151;
+  color: #ffffff;
+}
+
+/* Delete timer: visible danger styling */
+
+.timer-delete-button {
+  color: #fca5a5;
+  border-color: #7f1d1d;
+}
+
+.timer-delete-button:hover {
+  background: #450a0a;
+  border-color: #991b1b;
+  color: #fecaca;
+}
+
+/* =========================================================
+   CREATE TASK MODAL
+   ========================================================= */
+
+.task-modal-overlay {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.task-modal {
+  background: var(--tank-background);
+  color: var(--tank-text);
+  border-color: var(--tank-border);
+}
+
+.task-modal-header h2,
+.task-modal-header .task-details-label {
+  color: var(--tank-text);
+}
+
+.task-modal .task-details-close {
+  color: var(--tank-text);
+  background: transparent;
+}
+
+.task-modal .task-details-close:hover {
+  background: var(--tank-surface);
+  color: #ffffff;
+}
+
+/* Task form */
+
+.task-create-form {
+  color: var(--tank-text);
+}
+
+.task-form-field label {
+  color: var(--tank-text);
+}
+
+.task-form-field input,
+.task-form-field textarea {
+  background: var(--tank-surface);
+  color: var(--tank-text);
+  border-color: var(--tank-border);
+}
+
+.task-form-field input::placeholder,
+.task-form-field textarea::placeholder {
+  color: var(--tank-text-muted);
+}
+
+.task-form-field input:focus,
+.task-form-field textarea:focus {
+  border-color: #6b7280;
+  outline: none;
+}
+
+/* Create Task buttons */
+
+.task-cancel-button,
+.task-create-button {
+  border-color: var(--tank-border);
+}
+
+.task-cancel-button {
+  background: var(--tank-surface);
+  color: var(--tank-text);
+}
+
+.task-cancel-button:hover:not(:disabled) {
+  background: #374151;
+  color: #ffffff;
+}
+
+.task-create-button {
+  background: #374151;
+  color: #ffffff;
+}
+
+.task-create-button:hover:not(:disabled) {
+  background: #4b5563;
+}
+
+/* =========================================================
+   CREATE TIMER MODAL
+   ========================================================= */
+
+.timer-modal {
+  background: var(--tank-background);
+  color: var(--tank-text);
+}
+
+.timer-create-form {
+  color: var(--tank-text);
+}
+
+.timer-form-field label {
+  color: var(--tank-text);
+}
+
+.timer-form-field input,
+.timer-form-field select,
+.timer-duration-input input {
+  background: var(--tank-surface);
+  color: var(--tank-text);
+  border-color: var(--tank-border);
+}
+
+.timer-form-field input::placeholder {
+  color: var(--tank-text-muted);
+}
+
+.timer-form-field input:focus,
+.timer-form-field select:focus,
+.timer-duration-input input:focus {
+  border-color: #6b7280;
+  outline: none;
+}
+
+.timer-form-field select option {
+  background: var(--tank-surface);
+  color: var(--tank-text);
+}
+
+.timer-duration-input span {
+  color: var(--tank-text-muted);
+}
+
+/* Create Timer buttons */
+
+.timer-cancel-button,
+.timer-create-button {
+  border-color: var(--tank-border);
+}
+
+.timer-cancel-button {
+  background: var(--tank-surface);
+  color: var(--tank-text);
+}
+
+.timer-cancel-button:hover {
+  background: #374151;
+  color: #ffffff;
+}
+
+.timer-create-button {
+  background: #374151;
+  color: #ffffff;
+  border-color: #4b5563;
+}
+
+.timer-create-button:not(:disabled):hover {
+  background: #4b5563;
+  opacity: 1;
+}
+
+/* =========================================================
+   TASK DETAILS
+   ========================================================= */
+
+.task-details {
+  background: var(--tank-background);
+  color: var(--tank-text);
+}
+
+.task-details-header {
+  border-bottom-color: var(--tank-border);
+}
+
+.task-details-label,
+.task-details-section h3 {
+  color: var(--tank-text-muted);
+}
+
+.task-details-header h2,
+.task-details-section p {
+  color: var(--tank-text);
+}
+
+.task-details-close {
+  background: var(--tank-surface);
+  border-color: var(--tank-border);
+  color: var(--tank-text);
+}
+
+.task-details-close:hover {
+  background: #374151;
+}
+
+.task-status-badge.completed {
+  background: #374151;
+  color: var(--tank-text);
+}
+
+.task-status-badge.incomplete {
+  background: var(--tank-surface);
+  border-color: var(--tank-border);
+  color: var(--tank-text);
+}
+
+.task-details-section {
+  border-top-color: var(--tank-border);
+}
+
+/* =========================================================
+   CHAT
+   ========================================================= */
+
+.chat-window,
+.chat-header,
+.chat-messages {
+  background: var(--tank-background);
+  color: var(--tank-text);
+}
+
+.chat-header {
+  border-bottom-color: var(--tank-border);
+}
+
+.chat-member-count {
+  color: var(--tank-text-muted);
+}
+
+.message-input {
+  background: var(--tank-background);
+  border-top-color: var(--tank-border);
+}
+
+.message-input textarea,
+.message-input-container textarea {
+  background: var(--tank-surface);
+  color: var(--tank-text);
+  border-color: var(--tank-border);
+}
+
+.message-input textarea::placeholder,
+.message-input-container textarea::placeholder {
+  color: var(--tank-text-muted);
+}
+
+.message-input textarea:focus,
+.message-input-container textarea:focus {
+  border-color: #6b7280;
+  outline-color: #6b7280;
+}
+
+.message-input button,
+.send-button,
+.message-send-button {
+  color: var(--tank-text);
+  border-color: var(--tank-border);
+  background: transparent;
+}
+
+.message-input button:hover:not(:disabled),
+.send-button:hover:not(:disabled),
+.message-send-button:hover:not(:disabled) {
+  background: var(--tank-surface);
+  color: #ffffff;
+}
+
+.message-author,
+.message-sender {
+  color: var(--tank-text-muted);
+}
+
+.message-time,
+.message-timestamp {
+  color: var(--tank-text-muted);
+}
+
+/* Other-user message */
+
+.message-other .message-bubble,
+.message-bubble {
+  background: var(--tank-surface);
+  color: var(--tank-text);
+}
+
+/* Keep your own messages distinct */
+
+.message-own .message-bubble {
+  background: #2563eb;
+  color: #ffffff;
+}
+
+/* Chat menu */
+
+.message-menu {
+  background: var(--tank-surface);
+  border-color: var(--tank-border);
+}
+
+.message-menu button {
+  color: var(--tank-text);
+}
+
+.message-menu button:hover {
+  background: #374151;
+}
+
+.message-menu .message-delete-option {
+  color: #fca5a5;
+}
+
+.message-menu .message-delete-option:hover {
+  background: #450a0a;
+}
+
+/* =========================================================
+   CHAT ATTACHMENT PREVIEWS
+   ========================================================= */
+
+.message-attachment-preview-list {
+  background: var(--tank-background);
+  border-bottom-color: var(--tank-border);
+}
+
+.message-attachment-preview {
+  background: var(--tank-surface);
+  border-color: var(--tank-border);
+  color: var(--tank-text);
+}
+
+.message-attachment-preview-media {
+  background: #374151;
+}
+
+.message-attachment-preview-info span {
+  color: var(--tank-text);
+}
+
+.message-attachment-preview-info small {
+  color: var(--tank-text-muted);
+}
+
+.message-attachment-remove {
+  background: #374151;
+  color: var(--tank-text);
+}
+
+.message-attachment-remove:hover {
+  background: #4b5563;
+  color: #ffffff;
+}
+
+.message-attachment-error {
+  background: #450a0a;
+  border-color: #7f1d1d;
+  color: #fecaca;
+}
+
+.message-attach-button {
+  color: var(--tank-text);
+}
+
+.message-attach-button:hover {
+  background: var(--tank-surface);
+}
+
+/* Sent file attachments */
+
+.message-attachment-name {
+  color: #93c5fd;
+}
+
+.message-file-attachment {
+  background: var(--tank-surface);
+  border-color: var(--tank-border);
+  color: var(--tank-text);
+}
+
+.message-file-attachment:hover {
+  background: #374151;
+}
+
+.message-file-details strong {
+  color: var(--tank-text);
+}
+
+.message-file-details small,
+.message-file-download {
+  color: var(--tank-text-muted);
+}
+
+/* =========================================================
+   SHARED DOCUMENTS
+   ========================================================= */
+
+.document-panel {
+  background: var(--tank-background);
+  border-color: var(--tank-border);
+}
+
+.document-sidebar {
+  background: var(--tank-surface);
+  border-right-color: var(--tank-border);
+}
+
+.document-sidebar-header {
+  border-bottom-color: var(--tank-border);
+}
+
+.document-sidebar-header h2 {
+  color: var(--tank-text);
+}
+
+.document-sidebar-header span {
+  color: var(--tank-text-muted);
+}
+
+.document-list-item {
+  color: var(--tank-text);
+}
+
+.document-list-item:hover {
+  background: #374151;
+}
+
+.document-list-item.active {
+  background: #374151;
+}
+
+.document-list-info strong {
+  color: var(--tank-text);
+}
+
+.document-list-info small {
+  color: var(--tank-text-muted);
+}
+
+.document-main,
+.document-editor {
+  background: var(--tank-background);
+}
+
+.document-editor-header {
+  border-bottom-color: var(--tank-border);
+}
+
+.document-title-input {
+  color: var(--tank-text);
+}
+
+.document-save-status {
+  color: var(--tank-text-muted);
+}
+
+.document-toolbar {
+  background: var(--tank-surface);
+  border-bottom-color: var(--tank-border);
+}
+
+.document-toolbar button {
+  color: var(--tank-text);
+}
+
+.document-toolbar button:hover {
+  background: #374151;
+}
+
+.document-toolbar select {
+  background: var(--tank-surface);
+  color: var(--tank-text);
+  border-color: var(--tank-border);
+}
+
+.document-toolbar select option {
+  background: var(--tank-surface);
+  color: var(--tank-text);
+}
+
+.toolbar-divider {
+  background: var(--tank-border);
+}
+
+.document-content {
+  color: var(--tank-text);
+}
+
+.document-content:empty::before {
+  color: var(--tank-text-muted);
+}
+
+.document-editor-footer {
+  border-top-color: var(--tank-border);
+  color: var(--tank-text-muted);
+}
+
+.document-no-selection {
+  color: var(--tank-text-muted);
+}
+
+.document-no-selection h2 {
+  color: var(--tank-text);
+}
+
+.document-delete-button {
+  background: transparent;
+  border-color: #7f1d1d;
+  color: #fca5a5;
+}
+
+.document-delete-button:hover {
+  background: #450a0a;
+  color: #fecaca;
+}
+
+.document-collapse-button,
+.document-expand-button {
+  color: var(--tank-text-muted);
+}
+
+.document-collapse-button:hover,
+.document-expand-button:hover {
+  background: var(--tank-surface);
+  color: var(--tank-text);
+}
+
+.document-expand-button {
+  background: var(--tank-surface);
+  border-color: var(--tank-border);
+}
+
+.document-toolbar-button.active {
+  background: #374151;
+  color: #ffffff;
+  box-shadow: inset 0 0 0 1px #4b5563;
+}
+
+.document-toolbar-button.active:hover {
+  background: #4b5563;
+}
+
+/* Document export */
+
+.document-export-button {
+  background: var(--tank-surface);
+  color: var(--tank-text);
+  border-color: var(--tank-border);
+}
+
+.document-export-button:hover {
+  background: #374151;
+  border-color: #4b5563;
+}
+
+.document-export-menu {
+  background: var(--tank-surface);
+  border-color: var(--tank-border);
+}
+
+.document-export-menu button {
+  color: var(--tank-text);
+}
+
+.document-export-menu button:hover {
+  background: #374151;
+}
+
+/* =========================================================
+   GENERAL TANK PAGE STATES
+   ========================================================= */
+
+.tank-page-state {
+  background: var(--tank-background);
+  color: var(--tank-text);
+}
+
+.tank-page-state button {
+  background: var(--tank-surface);
+  color: var(--tank-text);
+  border-color: var(--tank-border);
+}
+
+.tank-page-state button:hover {
+  background: #374151;
 }

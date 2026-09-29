@@ -22,6 +22,7 @@ import {
 import {
   getTankMessages,
   sendMessage,
+  sendMessageWithAttachments,
   updateMessage,
   deleteMessage
 } from "../services/messageService";
@@ -401,37 +402,51 @@ function TankPage({ currentUserId }) {
   ========================= */
 
   async function handleSendMessage(
-    content
+    content,
+    files = []
   ) {
 
-    if (!content?.trim()) {
+    if (
+      !content?.trim() &&
+      files.length === 0
+    ) {
       return;
     }
 
     if (!currentUserId) {
+
       throw new Error(
         "Current user is not available."
       );
     }
 
-
     try {
 
       const savedMessage =
-        await sendMessage(
-          tank.id,
-          currentUserId,
-          {
-            content: content.trim()
-          }
-        );
+        files.length > 0
 
+          ? await sendMessageWithAttachments(
+              tank.id,
+              currentUserId,
+              content,
+              files
+            )
 
-      setMessages(previousMessages => [
-        ...previousMessages,
-        savedMessage
-      ]);
+          : await sendMessage(
+              tank.id,
+              currentUserId,
+              {
+                content:
+                  content.trim()
+              }
+            );
 
+      setMessages(
+        previousMessages => [
+          ...previousMessages,
+          savedMessage
+        ]
+      );
 
       return savedMessage;
 
@@ -443,9 +458,7 @@ function TankPage({ currentUserId }) {
       );
 
       throw err;
-
     }
-
   }
 
 
@@ -728,6 +741,10 @@ async function handleDeleteDocument(documentId) {
           tasks={tasks}
 
           timers={timers}
+
+          documents={
+            documents
+          }
 
           whiteboards={
             whiteboards

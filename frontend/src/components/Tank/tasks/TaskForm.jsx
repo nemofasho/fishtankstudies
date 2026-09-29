@@ -36,7 +36,6 @@ function TaskForm({
         description: description.trim(),
         dueDate: dueDate || null
       });
-
     } finally {
       setSaving(false);
     }
@@ -44,56 +43,82 @@ function TaskForm({
 
   return (
     <form
-      className="task-form"
+      className="task-create-form"
       onSubmit={handleSubmit}
     >
-      <input
-        type="text"
-        placeholder="Task title"
-        value={title}
-        onChange={(event) =>
-          setTitle(event.target.value)
-        }
-        disabled={saving}
-      />
+      <div className="task-form-field">
+        <label htmlFor="task-title">
+          Task Name
+        </label>
 
-      <textarea
-        placeholder="Description"
-        value={description}
-        onChange={(event) =>
-          setDescription(event.target.value)
-        }
-        disabled={saving}
-      />
-
-      <input
-        type="date"
-        value={dueDate}
-        onChange={(event) =>
-          setDueDate(event.target.value)
-        }
-        disabled={saving}
-      />
-
-      <div className="task-form-actions">
-
-        <button
-          type="submit"
-          disabled={
-            saving || !title.trim()
+        <input
+          id="task-title"
+          type="text"
+          placeholder="Biology Study"
+          value={title}
+          onChange={event =>
+            setTitle(event.target.value)
           }
-        >
-          {saving ? "Saving..." : "Save"}
-        </button>
+          disabled={saving}
+          maxLength={100}
+          required
+        />
+      </div>
 
+      <div className="task-form-field">
+        <label htmlFor="task-description">
+          Description
+        </label>
+
+        <textarea
+          id="task-description"
+          placeholder="Review chapters 1–3..."
+          value={description}
+          onChange={event =>
+            setDescription(event.target.value)
+          }
+          disabled={saving}
+          rows={4}
+        />
+      </div>
+
+      <div className="task-form-field">
+        <label htmlFor="task-due-date">
+          Due Date
+        </label>
+
+        <input
+          id="task-due-date"
+          type="date"
+          value={dueDate}
+          onChange={event =>
+            setDueDate(event.target.value)
+          }
+          disabled={saving}
+        />
+      </div>
+
+      <div className="task-modal-actions">
         <button
           type="button"
+          className="task-cancel-button"
           onClick={onCancel}
           disabled={saving}
         >
           Cancel
         </button>
 
+        <button
+          type="submit"
+          className="task-create-button"
+          disabled={
+            saving || !title.trim()
+          }
+        >
+          {saving
+            ? "Saving..."
+            : "Create Task"}
+        </button>
       </div>
     </form>
   );

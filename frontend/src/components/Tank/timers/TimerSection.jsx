@@ -60,17 +60,21 @@ function TimerSection({
       const updated = { ...previous };
 
       timers.forEach(timer => {
-        updated[timer.id] =
-          timer.remainingSeconds ?? 0;
+        // Only initialize timers that don't already
+        // have a local countdown value.
+        if (updated[timer.id] === undefined) {
+          updated[timer.id] =
+            timer.remainingSeconds ?? 0;
+        }
       });
 
       return updated;
     });
 
     /*
-     * On the first load, remember timers that were already
-     * finished so they don't trigger a notification.
-     */
+    * On the first load, remember timers that were already
+    * finished so they don't trigger a notification.
+    */
     if (!hasInitializedTimers.current) {
       timers.forEach(timer => {
         const remaining =
@@ -435,9 +439,19 @@ function TimerSection({
             </span>
           </div>
 
-          <span className="section-count">
-            {timers.length}
-          </span>
+          <div className="timer-header-actions">
+            <button
+              type="button"
+              className="timer-add-button"
+              onClick={() =>
+                setShowCreateModal(true)
+              }
+              title="Create timer"
+              aria-label="Create timer"
+            >
+              +
+            </button>
+          </div>
         </div>
 
         {timers.length === 0 ? (
@@ -521,18 +535,6 @@ function TimerSection({
               );
             })}
           </div>
-        )}
-
-        {onCreateTimer && (
-          <button
-            type="button"
-            className="add-button"
-            onClick={() =>
-              setShowCreateModal(true)
-            }
-          >
-            + Create Timer
-          </button>
         )}
       </section>
 
