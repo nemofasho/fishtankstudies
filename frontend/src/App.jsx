@@ -1,9 +1,10 @@
 import { Routes, Route } from "react-router-dom";
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+
+import "./App.css";
+
+import { AuthProvider } from "./context/AuthContext";
+import ProtectedRoute from "./components/ProtectedRoute";
+
 import Home from "./pages/Home";
 import Dashboard from "./pages/Dashboard";
 import TankPage from "./pages/TankPage";
@@ -11,45 +12,74 @@ import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
 import CreateTank from "./pages/CreateTank";
 
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+
 function App() {
-
-  const currentUserId = 1;
-
   return (
+    <AuthProvider>
 
-    <>
       <Navbar />
 
-    <Routes>
+      <Routes>
 
-      <Route
-        path="/"
-        element={<Home />}
-      />
+        {/* =========================
+            PUBLIC ROUTES
+            ========================= */}
 
-      <Route
-        path="/dashboard"
-        element={<Dashboard />}
-      />
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
 
-      <Route
-        path="/tanks/:tankId"
-        element={<TankPage currentUserId={1} />}
-      />
+        <Route
+          path="/register"
+          element={<RegisterPage />}
+        />
 
-      <Route
-        path="/tanks/create"
-        element={<CreateTank />}
-      />
 
-      <Route
-        path="*"
-        element={<NotFound />}
-      />
+        {/* =========================
+            PROTECTED ROUTES
+            ========================= */}
 
-    </Routes>
-    </>
+        <Route element={<ProtectedRoute />}>
+
+          <Route
+            path="/"
+            element={<Home />}
+          />
+
+          <Route
+            path="/dashboard"
+            element={<Dashboard />}
+          />
+
+          <Route
+            path="/tanks/:tankId"
+            element={<TankPage />}
+          />
+
+          <Route
+            path="/tanks/create"
+            element={<CreateTank />}
+          />
+
+        </Route>
+
+
+        {/* =========================
+            404
+            ========================= */}
+
+        <Route
+          path="*"
+          element={<NotFound />}
+        />
+
+      </Routes>
+
+    </AuthProvider>
   );
 }
 
-export default App
+export default App;

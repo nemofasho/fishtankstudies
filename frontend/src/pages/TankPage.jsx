@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
+import { useAuth } from "../context/AuthContext";
+
 import TankHeader from "../components/TankHeader";
 import WorkspacePanel from "../components/Tank/WorkspacePanel";
 import ChatWindow from "../components/Tank/chat/ChatWindow";
@@ -40,20 +42,22 @@ import {
 } from "../services/whiteboardEventService";
 
 import {
-    getTankDocuments,
-    createDocument,
-    updateDocument,
-    deleteDocument
+  getTankDocuments,
+  createDocument,
+  updateDocument,
+  deleteDocument
 } from "../services/documentService";
 
 import "../styles/tank.css";
 
 
-function TankPage({ currentUserId }) {
+function TankPage() {
 
-  console.log("CURRENT USER ID:", currentUserId);
+  const { user } = useAuth();
 
   const { tankId } = useParams();
+
+  const currentUserId = user?.id;
 
 
   /* =========================
@@ -77,7 +81,8 @@ function TankPage({ currentUserId }) {
 
   const [documents, setDocuments] = useState([]);
 
-  const [selectedDocumentId, setSelectedDocumentId] = useState(null);
+  const [selectedDocumentId, setSelectedDocumentId] =
+    useState(null);
 
 
   /* =========================
@@ -87,12 +92,13 @@ function TankPage({ currentUserId }) {
   const [activeWorkspace, setActiveWorkspace] =
     useState("chat");
 
-  
   const [selectedTaskId, setSelectedTaskId] =
     useState(null);
 
   const selectedTask =
-    tasks.find(task => task.id === selectedTaskId) || null;
+    tasks.find(
+      task => task.id === selectedTaskId
+    ) || null;
 
 
   /* =========================
@@ -153,16 +159,34 @@ function TankPage({ currentUserId }) {
         whiteboardData || []
       );
 
-      const loadedDocuments = documentData || [];
+
+      const loadedDocuments =
+        documentData || [];
 
       setDocuments(loadedDocuments);
 
-      if (
-        loadedDocuments.length > 0)
-        setSelectedDocumentId(previousId => { const stillExists = loadedDocuments.some(document => document.id === previousId); return stillExists ? previousId : loadedDocuments[0].id; }); 
-        else {
-          setSelectedDocumentId(null);
-        }
+
+      if (loadedDocuments.length > 0) {
+
+        setSelectedDocumentId(previousId => {
+
+          const stillExists =
+            loadedDocuments.some(
+              document =>
+                document.id === previousId
+            );
+
+          return stillExists
+            ? previousId
+            : loadedDocuments[0].id;
+
+        });
+
+      } else {
+
+        setSelectedDocumentId(null);
+
+      }
 
     } catch (err) {
 
@@ -175,7 +199,6 @@ function TankPage({ currentUserId }) {
         err.message ||
         "Failed to load Tank data."
       );
-
 
     } finally {
 
@@ -210,8 +233,8 @@ function TankPage({ currentUserId }) {
         );
 
       setTasks(previousTasks => [
-        ...previousTasks,
-        savedTask
+        savedTask,
+        ...previousTasks
       ]);
 
       return savedTask;
@@ -413,12 +436,15 @@ function TankPage({ currentUserId }) {
       return;
     }
 
+
     if (!currentUserId) {
 
       throw new Error(
         "Current user is not available."
       );
+
     }
+
 
     try {
 
@@ -441,12 +467,14 @@ function TankPage({ currentUserId }) {
               }
             );
 
+
       setMessages(
         previousMessages => [
           ...previousMessages,
           savedMessage
         ]
       );
+
 
       return savedMessage;
 
@@ -458,7 +486,9 @@ function TankPage({ currentUserId }) {
       );
 
       throw err;
+
     }
+
   }
 
 
@@ -492,118 +522,192 @@ function TankPage({ currentUserId }) {
 
   }
 
+
   async function handleEditMessage(
-  messageId,
-  content
-) {
+    messageId,
+    content
+  ) {
 
-  try {
+    try {
 
-    const updatedMessage =
-      await updateMessage(
-        messageId,
-        {
-          content
-        }
+      const updatedMessage =
+        await updateMessage(
+          messageId,
+          {
+            content
+          }
+        );
+
+
+      setMessages(previousMessages =>
+        previousMessages.map(message =>
+          message.id === updatedMessage.id
+            ? updatedMessage
+            : message
+        )
       );
 
-    setMessages(previousMessages =>
-      previousMessages.map(message =>
-        message.id === updatedMessage.id
-          ? updatedMessage
-          : message
-      )
-    );
 
-    return updatedMessage;
+      return updatedMessage;
 
-  } catch (err) {
+    } catch (err) {
 
-    console.error(
-      "Failed to edit message:",
-      err
-    );
+      console.error(
+        "Failed to edit message:",
+        err
+      );
 
-    throw err;
-  }
-}
+      throw err;
 
-async function handleCreateDocument() {
-  try {
-    const newDocument = await createDocument(tankId, {
-      title: "Untitled Document",
-      content: ""
-    });
+    }
 
-    setDocuments(previousDocuments => [
-      newDocument,
-      ...previousDocuments
-    ]);
-
-    setSelectedDocumentId(newDocument.id);
-
-    return newDocument;
-  } catch (err) {
-    console.error("Failed to create document:", err);
-    throw err;
-  }
-}
-
-async function handleUpdateDocument(documentId, documentData) {
-  try {
-    const updatedDocument = await updateDocument(
-      documentId,
-      documentData
-    );
-
-    setDocuments(previousDocuments =>
-      previousDocuments.map(document =>
-        document.id === updatedDocument.id
-          ? updatedDocument
-          : document
-      )
-    );
-
-    return updatedDocument;
-  } catch (err) {
-    console.error("Failed to update document:", err);
-    throw err;
-  }
-}
-
-async function handleDeleteDocument(documentId) {
-  const confirmed = window.confirm(
-    "Delete this document? This cannot be undone."
-  );
-
-  if (!confirmed) {
-    return;
   }
 
-  try {
-    await deleteDocument(documentId);
 
-    setDocuments(previousDocuments => {
-      const remainingDocuments =
-        previousDocuments.filter(
-          document => document.id !== documentId
+  /* =========================
+     DOCUMENTS
+  ========================= */
+
+  async function handleCreateDocument() {
+
+    try {
+
+      const newDocument =
+        await createDocument(
+          tankId,
+          {
+            title: "Untitled Document",
+            content: ""
+          }
         );
 
-      if (selectedDocumentId === documentId) {
-        setSelectedDocumentId(
-          remainingDocuments.length > 0
-            ? remainingDocuments[0].id
-            : null
-        );
-      }
 
-      return remainingDocuments;
-    });
-  } catch (err) {
-    console.error("Failed to delete document:", err);
-    throw err;
+      setDocuments(previousDocuments => [
+        newDocument,
+        ...previousDocuments
+      ]);
+
+
+      setSelectedDocumentId(
+        newDocument.id
+      );
+
+
+      return newDocument;
+
+    } catch (err) {
+
+      console.error(
+        "Failed to create document:",
+        err
+      );
+
+      throw err;
+
+    }
+
   }
-}
+
+
+  async function handleUpdateDocument(
+    documentId,
+    documentData
+  ) {
+
+    try {
+
+      const updatedDocument =
+        await updateDocument(
+          documentId,
+          documentData
+        );
+
+
+      setDocuments(previousDocuments =>
+        previousDocuments.map(document =>
+          document.id === updatedDocument.id
+            ? updatedDocument
+            : document
+        )
+      );
+
+
+      return updatedDocument;
+
+    } catch (err) {
+
+      console.error(
+        "Failed to update document:",
+        err
+      );
+
+      throw err;
+
+    }
+
+  }
+
+
+  async function handleDeleteDocument(
+    documentId
+  ) {
+
+    const confirmed =
+      window.confirm(
+        "Delete this document? This cannot be undone."
+      );
+
+
+    if (!confirmed) {
+      return;
+    }
+
+
+    try {
+
+      await deleteDocument(
+        documentId
+      );
+
+
+      setDocuments(previousDocuments => {
+
+        const remainingDocuments =
+          previousDocuments.filter(
+            document =>
+              document.id !== documentId
+          );
+
+
+        if (
+          selectedDocumentId === documentId
+        ) {
+
+          setSelectedDocumentId(
+            remainingDocuments.length > 0
+              ? remainingDocuments[0].id
+              : null
+          );
+
+        }
+
+
+        return remainingDocuments;
+
+      });
+
+    } catch (err) {
+
+      console.error(
+        "Failed to delete document:",
+        err
+      );
+
+      throw err;
+
+    }
+
+  }
 
 
   /* =========================
@@ -783,10 +887,20 @@ async function handleDeleteDocument(documentId) {
           }
 
           onTaskSelect={task => {
-            setSelectedTaskId(task.id);
-            setActiveWorkspace("task");
-        }}
-        selectedTaskId={selectedTaskId}
+
+            setSelectedTaskId(
+              task.id
+            );
+
+            setActiveWorkspace(
+              "task"
+            );
+
+          }}
+
+          selectedTaskId={
+            selectedTaskId
+          }
 
         />
 
@@ -797,14 +911,27 @@ async function handleDeleteDocument(documentId) {
 
 
           {activeWorkspace === "task" && (
+
             <TaskDetails
+
               task={selectedTask}
+
               onClose={() => {
-                setSelectedTaskId(null);
-                setActiveWorkspace("chat");
+
+                setSelectedTaskId(
+                  null
+                );
+
+                setActiveWorkspace(
+                  "chat"
+                );
+
               }}
+
             />
+
           )}
+
 
           {activeWorkspace === "chat" && (
 
@@ -834,16 +961,39 @@ async function handleDeleteDocument(documentId) {
 
           )}
 
+
           {activeWorkspace === "documents" && (
+
             <DocumentPanel
+
               tank={tank}
-              documents={documents}
-              selectedDocumentId={selectedDocumentId}
-              onSelectDocument={setSelectedDocumentId}
-              onCreateDocument={handleCreateDocument}
-              onUpdateDocument={handleUpdateDocument}
-              onDeleteDocument={handleDeleteDocument}
+
+              documents={
+                documents
+              }
+
+              selectedDocumentId={
+                selectedDocumentId
+              }
+
+              onSelectDocument={
+                setSelectedDocumentId
+              }
+
+              onCreateDocument={
+                handleCreateDocument
+              }
+
+              onUpdateDocument={
+                handleUpdateDocument
+              }
+
+              onDeleteDocument={
+                handleDeleteDocument
+              }
+
             />
+
           )}
 
 
