@@ -9,6 +9,7 @@ import com.nehemiah.studyapp.models.Tank;
 import com.nehemiah.studyapp.models.User;
 import com.nehemiah.studyapp.Repositories.TankRepository;
 import com.nehemiah.studyapp.Repositories.UserRepository;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,14 +21,29 @@ public class TankService {
     private final TankRepository tankRepository;
     private final UserRepository userRepository;
 
-    public TankService(TankRepository tankRepository,
-                       UserRepository userRepository) {
+    public TankService(
+            TankRepository tankRepository,
+            UserRepository userRepository) {
 
         this.tankRepository = tankRepository;
         this.userRepository = userRepository;
     }
 
-    public TankResponse createTank(CreateTankRequest request) {
+
+    /* =========================
+       CREATE TANK
+    ========================= */
+
+    public TankResponse createTank(
+            CreateTankRequest request,
+            Long userId) {
+
+        User user = userRepository.findById(userId)
+                .orElseThrow(() ->
+                        new ResourceNotFoundException(
+                                "User not found with id: " + userId
+                        )
+                );
 
         Tank tank = new Tank();
 
@@ -35,10 +51,35 @@ public class TankService {
         tank.setSubject(request.getSubject());
         tank.setClassName(request.getClassName());
 
-        Tank savedTank = tankRepository.save(tank);
+        // Automatically make creator a member
+        tank.getMembers().add(user);
+
+        Tank savedTank =
+                tankRepository.save(tank);
 
         return mapToResponse(savedTank);
     }
+
+
+    /* =========================
+       GET USER'S TANKS
+    ========================= */
+
+    public List<TankResponse> getMyTanks(
+            Long userId) {
+
+        return tankRepository
+                .findByMembersId(userId)
+                .stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+    }
+
+
+    /* =========================
+       GET ALL TANKS
+       Used later for discovery
+    ========================= */
 
     public List<TankResponse> getAllTanks() {
 
@@ -48,61 +89,144 @@ public class TankService {
                 .collect(Collectors.toList());
     }
 
-    public TankResponse getTankById(Long id) {
 
-        Tank tank = tankRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Tank not found with id: " + id));
+    /* =========================
+       GET TANK BY ID
+    ========================= */
+
+    public TankResponse getTankById(Long tankId, Long userId) {
+        Tank tank = tankRepository.findById(tankId)
+                .orElseThrow(() ->
+                new ResourceNotFoundException("Tank not found with id: " + tankId)
+                );
+
+        boolean isMember = tank.getMembers().stream()
+                .anyMatch(member -> member.getId().equals(userId));
+
+        if (!isMember) {
+                throw new RuntimeException("You are not a member of this tank");
+        }
 
         return mapToResponse(tank);
-    }
+        }
 
-    public TankResponse updateTank(Long id,
-                                   UpdateTankRequest request) {
 
-        Tank tank = tankRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Tank not found with id: " + id));
+    /* =========================
+       UPDATE TANK
+    ========================= */
+
+    public TankResponse updateTank(
+            Long id,
+            UpdateTankRequest request) {
+
+        Tank tank =
+                tankRepository.findById(id)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Tank not found with id: " + id
+                                )
+                        );
 
         tank.setName(request.getName());
         tank.setSubject(request.getSubject());
         tank.setClassName(request.getClassName());
 
-        Tank updatedTank = tankRepository.save(tank);
+        Tank updatedTank =
+                tankRepository.save(tank);
 
         return mapToResponse(updatedTank);
     }
 
-    public TankResponse addUserToTank(Long tankId,
-                                      Long userId) {
 
-        Tank tank = tankRepository.findById(tankId)
-                .orElseThrow(() -> new ResourceNotFoundException("Tank not found with id: " + tankId));
+    /* =========================
+       JOIN TANK
+    ========================= */
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + userId));
+    public TankResponse addUserToTank(
+            Long tankId,
+            Long userId) {
 
-        tank.getMembers().add(user);
+        Tank tank =
+                tankRepository.findById(tankId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Tank not found with id: " + tankId
+                                )
+                        );
 
-        Tank updatedTank = tankRepository.save(tank);
+        User user =
+                userRepository.findById(userId)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "User not found with id: " + userId
+                                )
+                        );
+
+        if (!tank.getMembers().contains(user)) {
+            tank.getMembers().add(user);
+        }
+
+        Tank updatedTank =
+                tankRepository.save(tank);
 
         return mapToResponse(updatedTank);
     }
+
+
+    /* =========================
+       DELETE TANK
+    ========================= */
 
     public void deleteTank(Long id) {
 
-        Tank tank = tankRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Tank not found with id: " + id));
+        Tank tank =
+                tankRepository.findById(id)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Tank not found with id: " + id
+                                )
+                        );
 
         tankRepository.delete(tank);
     }
 
-    private TankResponse mapToResponse(Tank tank) {
+    public Long getUserIdByEmail(String email) {
 
-        TankResponse response = new TankResponse();
+        User user =
+                userRepository.findByEmail(email)
+                        .orElseThrow(() ->
+                                new ResourceNotFoundException(
+                                        "Authenticated user not found"
+                                )
+                        );
+
+        return user.getId();
+        }
+
+
+    /* =========================
+       MAP RESPONSE
+    ========================= */
+
+    private TankResponse mapToResponse(
+            Tank tank) {
+
+        TankResponse response =
+                new TankResponse();
 
         response.setId(tank.getId());
-        response.setName(tank.getName());
-        response.setSubject(tank.getSubject());
-        response.setClassName(tank.getClassName());
+
+        response.setName(
+                tank.getName()
+        );
+
+        response.setSubject(
+                tank.getSubject()
+        );
+
+        response.setClassName(
+                tank.getClassName()
+        );
 
         response.setMemberCount(
                 tank.getMembers() == null
@@ -116,26 +240,31 @@ public class TankService {
                         : tank.getTasks().size()
         );
 
+
         List<MemberResponse> members =
                 tank.getMembers() == null
                         ? List.of()
                         : tank.getMembers()
                                 .stream()
                                 .map(user -> {
-                                        MemberResponse member =
-                                                new MemberResponse();
 
-                                        member.setId(user.getId());
-                                        member.setUsername(
-                                                user.getUsername()
-                                        );
+                                    MemberResponse member =
+                                            new MemberResponse();
 
-                                        return member;
+                                    member.setId(
+                                            user.getId()
+                                    );
+
+                                    member.setUsername(
+                                            user.getUsername()
+                                    );
+
+                                    return member;
                                 })
                                 .toList();
 
         response.setMembers(members);
 
         return response;
-        }
+    }
 }

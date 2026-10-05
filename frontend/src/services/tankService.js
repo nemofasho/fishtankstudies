@@ -7,7 +7,7 @@ export async function getTank(tankId) {
 }
 
 export async function getTanks() {
-  return apiRequest(TANKS_ENDPOINT);
+  return apiRequest("/tanks/my");
 }
 
 export async function createTank(tankData) {

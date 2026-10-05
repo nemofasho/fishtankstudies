@@ -1,15 +1,14 @@
 package com.nehemiah.studyapp.Controllers;
 
-import com.nehemiah.studyapp.models.Tank;
-
-import jakarta.validation.Valid;
-
 import com.nehemiah.studyapp.Services.TankService;
 import com.nehemiah.studyapp.dto.tank.CreateTankRequest;
 import com.nehemiah.studyapp.dto.tank.TankResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 
@@ -18,37 +17,118 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:5173")
 public class TankController {
 
-    @Autowired
-    private TankService tankService;
+    private final TankService tankService;
+
+    public TankController(
+            TankService tankService) {
+
+        this.tankService = tankService;
+    }
+
+
+    /* =========================
+       CREATE TANK
+    ========================= */
 
     @PostMapping
-    public TankResponse createTank(@Valid @RequestBody CreateTankRequest request) {
-    return tankService.createTank(request);
+    public TankResponse createTank(
+            @Valid @RequestBody CreateTankRequest request,
+            Authentication authentication) {
+
+        Long userId =
+                getAuthenticatedUserId(authentication);
+
+        return tankService.createTank(
+                request,
+                userId
+        );
     }
+
+
+    /* =========================
+       MY TANKS
+    ========================= */
+
+    @GetMapping("/my")
+    public List<TankResponse> getMyTanks(
+            Authentication authentication) {
+
+        Long userId =
+                getAuthenticatedUserId(authentication);
+
+        return tankService.getMyTanks(userId);
+    }
+
+
+    /* =========================
+       ALL TANKS
+       Future discovery page
+    ========================= */
 
     @GetMapping
     public List<TankResponse> getAllTanks() {
+
         return tankService.getAllTanks();
     }
 
+
+    /* =========================
+       GET TANK
+    ========================= */
+
     @GetMapping("/{id}")
-    public TankResponse getTankById(@PathVariable Long id) {
-        return tankService.getTankById(id);
+    public TankResponse getTankById(
+            @PathVariable Long id,
+            Authentication authentication) {
+
+        Long userId = getAuthenticatedUserId(authentication);
+        return tankService.getTankById(id, userId);
     }
 
-    @PostMapping("/{tankId}/join/{userId}")
+
+    /* =========================
+       JOIN TANK
+       Temporary version
+    ========================= */
+
+    @PostMapping("/{tankId}/join")
     public TankResponse joinTank(
             @PathVariable Long tankId,
-            @PathVariable Long userId) {
+            Authentication authentication) {
 
-        return tankService.addUserToTank(tankId, userId);
+        Long userId = getAuthenticatedUserId(authentication);
+
+        return tankService.addUserToTank(
+                tankId,
+                userId
+        );
     }
 
+
+    /* =========================
+       DELETE TANK
+    ========================= */
+
     @DeleteMapping("/{id}")
-    public String deleteTank(@PathVariable Long id) {
+    public String deleteTank(
+            @PathVariable Long id) {
 
         tankService.deleteTank(id);
 
         return "Tank deleted successfully";
+    }
+
+
+    /* =========================
+       AUTHENTICATED USER
+    ========================= */
+
+    private Long getAuthenticatedUserId(
+            Authentication authentication) {
+
+        String email =
+                authentication.getName();
+
+        return tankService.getUserIdByEmail(email);
     }
 }
