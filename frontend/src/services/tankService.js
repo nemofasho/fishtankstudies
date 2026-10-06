@@ -29,3 +29,13 @@ export async function deleteTank(tankId) {
     method: "DELETE"
   });
 }
+
+export async function getAvailableTanks() {
+  return apiRequest(TANKS_ENDPOINT);
+}
+
+export async function joinTank(tankId) {
+  return apiRequest(`/tanks/${tankId}/join`, {
+    method: "POST"
+  });
+}

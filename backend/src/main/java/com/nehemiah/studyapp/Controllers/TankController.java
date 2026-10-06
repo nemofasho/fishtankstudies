@@ -98,10 +98,7 @@ public class TankController {
 
         Long userId = getAuthenticatedUserId(authentication);
 
-        return tankService.addUserToTank(
-                tankId,
-                userId
-        );
+        return tankService.addUserToTank(tankId, userId);
     }
 
 

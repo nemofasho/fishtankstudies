@@ -11,6 +11,7 @@ import TankPage from "./pages/TankPage";
 import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
 import CreateTank from "./pages/CreateTank";
+import FindTank from "./pages/FindTanks";
 
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -44,25 +45,15 @@ function App() {
 
         <Route element={<ProtectedRoute />}>
 
-          <Route
-            path="/"
-            element={<Home />}
-          />
+          <Route path="/" element={<Home />} />
 
-          <Route
-            path="/dashboard"
-            element={<Dashboard />}
-          />
+          <Route path="/dashboard" element={<Dashboard />} />
 
-          <Route
-            path="/tanks/:tankId"
-            element={<TankPage />}
-          />
+          <Route path="/tanks/:tankId" element={<TankPage />} />
 
-          <Route
-            path="/tanks/create"
-            element={<CreateTank />}
-          />
+          <Route path="/tanks/create" element={<CreateTank />} />
+          
+          <Route path="/tanks/find" element={<FindTank />} />
 
         </Route>
 
