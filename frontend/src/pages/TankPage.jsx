@@ -364,6 +364,7 @@ function TankPage() {
 
       const updatedTimer =
         await updateTimer(
+          tank.id,
           timerId,
           timerData
         );
@@ -398,7 +399,7 @@ function TankPage() {
 
     try {
 
-      await deleteTimer(timerId);
+      await deleteTimer(tank.id, timerId);
 
       setTimers(previousTimers =>
         previousTimers.filter(

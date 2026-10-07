@@ -4,7 +4,6 @@ import com.nehemiah.studyapp.exception.ResourceNotFoundException;
 import com.nehemiah.studyapp.dto.task.CreateTaskRequest;
 import com.nehemiah.studyapp.dto.task.UpdateTaskRequest;
 import com.nehemiah.studyapp.dto.task.TaskResponse;
-import com.nehemiah.studyapp.dto.tank.MemberResponse;
 import com.nehemiah.studyapp.models.Task;
 import com.nehemiah.studyapp.models.Tank;
 import com.nehemiah.studyapp.Repositories.TaskRepository;
@@ -19,18 +18,23 @@ public class TaskService {
 
     private final TaskRepository taskRepository;
     private final TankRepository tankRepository;
+    private final ActivityService activityService;
 
     public TaskService(
             TaskRepository taskRepository,
-            TankRepository tankRepository) {
+            TankRepository tankRepository,
+            ActivityService activityService) {
 
         this.taskRepository = taskRepository;
         this.tankRepository = tankRepository;
+        this.activityService = activityService;
     }
 
     public TaskResponse createTask(
             Long tankId,
-            CreateTaskRequest request) {
+            CreateTaskRequest request,
+            Long userId,
+            String username) {
 
         Tank tank = tankRepository.findById(tankId)
                 .orElseThrow(() ->
@@ -45,8 +49,17 @@ public class TaskService {
         task.setDueDate(request.getDueDate());
         task.setTank(tank);
 
-        Task savedTask =
-                taskRepository.save(task);
+        Task savedTask = taskRepository.save(task);
+
+        activityService.recordActivity(
+                userId,
+                tankId,
+                "TASK_CREATED",
+                username
+                        + " created the task \""
+                        + savedTask.getTitle()
+                        + "\"."
+        );
 
         return mapToResponse(savedTask);
     }
@@ -80,7 +93,9 @@ public class TaskService {
 
     public TaskResponse updateTask(
             Long taskId,
-            UpdateTaskRequest request) {
+            UpdateTaskRequest request,
+            Long userId,
+            String username) {
 
         Task task =
                 taskRepository.findById(taskId)
@@ -89,6 +104,8 @@ public class TaskService {
                                         "Task not found with id: "
                                                 + taskId));
 
+        boolean wasCompleted = task.isCompleted();
+
         task.setTitle(request.getTitle());
         task.setDescription(request.getDescription());
         task.setCompleted(request.isCompleted());
@@ -96,6 +113,21 @@ public class TaskService {
 
         Task updatedTask =
                 taskRepository.save(task);
+
+        if (!wasCompleted && updatedTask.isCompleted()) {
+
+            Long tankId = updatedTask.getTank().getId();
+
+            activityService.recordActivity(
+                    userId,
+                    tankId,
+                    "TASK_COMPLETED",
+                    username
+                            + " completed the task \""
+                            + updatedTask.getTitle()
+                            + "\"."
+            );
+        }
 
         return mapToResponse(updatedTask);
     }

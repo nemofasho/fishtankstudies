@@ -955,3 +955,36 @@
     grid-template-columns: 1fr;
   }
 }
+
+.home-activity-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.home-activity-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 18px 20px;
+  border-bottom: 1px solid #ddd;
+}
+
+.home-activity-item:last-child {
+  border-bottom: none;
+}
+
+.home-activity-content {
+  min-width: 0;
+}
+
+.home-activity-content p {
+  margin: 0 0 5px;
+}
+
+.home-activity-content span {
+  font-size: 13px;
+  opacity: 0.6;
+}

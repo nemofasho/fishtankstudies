@@ -19,18 +19,23 @@ public class DocumentService {
 
     private final DocumentRepository documentRepository;
     private final TankRepository tankRepository;
+    private final ActivityService activityService;
 
     public DocumentService(
             DocumentRepository documentRepository,
-            TankRepository tankRepository) {
+            TankRepository tankRepository,
+            ActivityService activityService) {
 
         this.documentRepository = documentRepository;
         this.tankRepository = tankRepository;
+        this.activityService = activityService;
     }
 
     public DocumentResponse createDocument(
             Long tankId,
-            CreateDocumentRequest request) {
+            CreateDocumentRequest request,
+            Long userId,
+            String username) {
 
         Tank tank = tankRepository.findById(tankId)
                 .orElseThrow(() ->
@@ -58,9 +63,10 @@ public class DocumentService {
         document.setCreatedAt(now);
         document.setUpdatedAt(now);
 
-        Document savedDocument =
-                documentRepository.save(document);
-
+        Document savedDocument = documentRepository.save(document);
+        
+        activityService.recordActivity(userId, tankId, "DOCUMENT_CREATED", username + " created the document \"" + savedDocument.getTitle() + "\".");
+        
         return mapToResponse(savedDocument);
     }
 
