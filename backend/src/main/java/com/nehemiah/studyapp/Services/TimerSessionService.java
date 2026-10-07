@@ -10,6 +10,7 @@ import com.nehemiah.studyapp.Repositories.TankRepository;
 import com.nehemiah.studyapp.Repositories.TimerSessionRepository;
 
 import org.springframework.stereotype.Service;
+import org.springframework.security.core.Authentication;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
@@ -20,18 +21,26 @@ public class TimerSessionService {
 
     private final TimerSessionRepository timerSessionRepository;
     private final TankRepository tankRepository;
+    private final ActivityService activityService;
 
     public TimerSessionService(
             TimerSessionRepository timerSessionRepository,
-            TankRepository tankRepository) {
+            TankRepository tankRepository,
+            ActivityService activityService) {
 
         this.timerSessionRepository = timerSessionRepository;
         this.tankRepository = tankRepository;
+        this.activityService = activityService;
     }
 
+    /*
+     * Create a new timer.
+     */
     public TimerResponse createTimer(
             Long tankId,
-            CreateTimerRequest request) {
+            CreateTimerRequest request,
+            Long userId,
+            String username) {
 
         Tank tank = tankRepository.findById(tankId)
                 .orElseThrow(() ->
@@ -48,21 +57,26 @@ public class TimerSessionService {
 
         timer.setDuration(request.getDuration());
 
-        long totalSeconds = request.getDuration() * 60L;
+        long totalSeconds =
+                request.getDuration() * 60L;
 
         timer.setRemainingSeconds(totalSeconds);
 
         timer.setTank(tank);
 
         /*
-         * Timers are designed to start immediately when created.
+         * Timers are designed to start immediately
+         * when created if active is true.
          */
         if (request.isActive()) {
 
-            LocalDateTime now = LocalDateTime.now();
+            LocalDateTime now =
+                    LocalDateTime.now();
 
             timer.setActive(true);
+
             timer.setStartTime(now);
+
             timer.setEndTime(
                     now.plusSeconds(totalSeconds)
             );
@@ -77,10 +91,27 @@ public class TimerSessionService {
         TimerSession savedTimer =
                 timerSessionRepository.save(timer);
 
+        /*
+         * Record timer creation activity.
+         */
+        activityService.recordActivity(
+                userId,
+                tankId,
+                "TIMER_CREATED",
+                username
+                        + " created the timer \""
+                        + savedTimer.getName()
+                        + "\"."
+        );
+
         return mapToResponse(savedTimer);
     }
 
-    public List<TimerResponse> getTankTimers(Long tankId) {
+    /*
+     * Get all timers for a tank.
+     */
+    public List<TimerResponse> getTankTimers(
+            Long tankId) {
 
         Tank tank = tankRepository.findById(tankId)
                 .orElseThrow(() ->
@@ -93,7 +124,11 @@ public class TimerSessionService {
                 .toList();
     }
 
-    public TimerResponse getTimerById(Long timerId) {
+    /*
+     * Get a single timer.
+     */
+    public TimerResponse getTimerById(
+            Long timerId) {
 
         TimerSession timer =
                 timerSessionRepository.findById(timerId)
@@ -105,9 +140,14 @@ public class TimerSessionService {
         return syncAndMapTimer(timer);
     }
 
+    /*
+     * Update a timer.
+     */
     public TimerResponse updateTimer(
             Long timerId,
-            UpdateTimerRequest request) {
+            UpdateTimerRequest request,
+            Long userId,
+            String username) {
 
         TimerSession timer =
                 timerSessionRepository.findById(timerId)
@@ -122,46 +162,59 @@ public class TimerSessionService {
         if (request.getName() != null &&
                 !request.getName().isBlank()) {
 
-            timer.setName(request.getName().trim());
+            timer.setName(
+                    request.getName().trim()
+            );
         }
 
         /*
-         * If the timer is currently running, first calculate
-         * how much time is actually left.
+         * If the timer is currently running,
+         * calculate the actual remaining time first.
          */
         if (timer.isActive()) {
-            updateRemainingTime(timer);
+
+            updateRemainingTime(
+                    timer,
+                    userId,
+                    username
+            );
         }
 
-        boolean requestedActive = request.isActive();
+        boolean requestedActive =
+                request.isActive();
 
         /*
          * PAUSE
          */
-        if (timer.isActive() && !requestedActive) {
+        if (timer.isActive() &&
+                !requestedActive) {
 
             timer.setActive(false);
 
             /*
-             * remainingSeconds was already calculated above.
+             * Keep the current remainingSeconds.
              */
             timer.setEndTime(null);
-
         }
 
         /*
          * RESUME
          */
-        else if (!timer.isActive() && requestedActive) {
+        else if (!timer.isActive() &&
+                requestedActive) {
 
-            long remaining = timer.getRemainingSeconds();
+            long remaining =
+                    timer.getRemainingSeconds();
 
             if (remaining > 0) {
 
-                LocalDateTime now = LocalDateTime.now();
+                LocalDateTime now =
+                        LocalDateTime.now();
 
                 timer.setActive(true);
+
                 timer.setStartTime(now);
+
                 timer.setEndTime(
                         now.plusSeconds(remaining)
                 );
@@ -169,7 +222,7 @@ public class TimerSessionService {
             } else {
 
                 /*
-                 * If the timer has finished, don't resume it.
+                 * Timer has already finished.
                  */
                 timer.setActive(false);
                 timer.setEndTime(null);
@@ -178,24 +231,27 @@ public class TimerSessionService {
 
         /*
          * Update duration only if it has changed.
-         *
-         * This is mainly useful if the timer is still paused.
          */
         if (request.getDuration() > 0 &&
-                request.getDuration() != timer.getDuration()) {
+                request.getDuration()
+                        != timer.getDuration()) {
 
-            timer.setDuration(request.getDuration());
+            timer.setDuration(
+                    request.getDuration()
+            );
 
             /*
-             * If paused, changing duration resets the
-             * remaining time to the new duration.
+             * If paused, changing the duration
+             * resets the remaining time.
              */
             if (!timer.isActive()) {
 
                 long newRemaining =
                         request.getDuration() * 60L;
 
-                timer.setRemainingSeconds(newRemaining);
+                timer.setRemainingSeconds(
+                        newRemaining
+                );
             }
         }
 
@@ -205,7 +261,11 @@ public class TimerSessionService {
         return mapToResponse(updatedTimer);
     }
 
-    public void deleteTimer(Long timerId) {
+    /*
+     * Delete a timer.
+     */
+    public void deleteTimer(
+            Long timerId) {
 
         TimerSession timer =
                 timerSessionRepository.findById(timerId)
@@ -217,17 +277,127 @@ public class TimerSessionService {
         timerSessionRepository.delete(timer);
     }
 
-    /**
+    /*
      * Calculates the remaining time for a running timer
      * using its server-side endTime.
+     *
+     * If the timer reaches zero, a TIMER_COMPLETED
+     * activity is recorded.
      */
-    private void updateRemainingTime(TimerSession timer) {
+    private void updateRemainingTime(
+            TimerSession timer,
+            Long userId,
+            String username) {
 
-        if (!timer.isActive() || timer.getEndTime() == null) {
+        if (!timer.isActive() ||
+                timer.getEndTime() == null) {
+
             return;
         }
 
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now =
+                LocalDateTime.now();
+
+        long remaining =
+                Duration.between(
+                        now,
+                        timer.getEndTime()
+                ).getSeconds();
+
+        if (remaining <= 0) {
+
+            /*
+             * Timer has finished.
+             */
+            timer.setRemainingSeconds(0);
+
+            timer.setActive(false);
+
+            timer.setEndTime(null);
+
+            /*
+             * Record the completion activity.
+             */
+            if (userId != null &&
+                    username != null) {
+
+                Long tankId =
+                        timer.getTank() != null
+                                ? timer.getTank().getId()
+                                : null;
+
+                if (tankId != null) {
+
+                    activityService.recordActivity(
+                            userId,
+                            tankId,
+                            "TIMER_COMPLETED",
+                            username
+                                    + " completed the timer \""
+                                    + timer.getName()
+                                    + "\"."
+                    );
+                }
+            }
+
+        } else {
+
+            timer.setRemainingSeconds(
+                    remaining
+            );
+        }
+    }
+
+    /*
+     * Synchronizes a timer with the current
+     * server time before returning it.
+     */
+    private TimerResponse syncAndMapTimer(
+            TimerSession timer) {
+
+        if (timer.isActive()) {
+
+            /*
+             * For GET requests, we do not have the
+             * authenticated user's information here.
+             *
+             * The timer will still be synchronized,
+             * but completion activity is handled when
+             * the timer is updated through the
+             * authenticated update endpoint.
+             */
+            updateRemainingTimeWithoutActivity(
+                    timer
+            );
+
+            /*
+             * Save the updated timer state.
+             */
+            timerSessionRepository.save(timer);
+        }
+
+        return mapToResponse(timer);
+    }
+
+    /*
+     * Synchronizes the timer without creating an
+     * activity record.
+     *
+     * This prevents duplicate TIMER_COMPLETED
+     * activities when the frontend repeatedly
+     * polls the timer.
+     */
+    private void updateRemainingTimeWithoutActivity(
+            TimerSession timer) {
+
+        if (!timer.isActive() ||
+                timer.getEndTime() == null) {
+
+            return;
+        }
+
+        LocalDateTime now =
+                LocalDateTime.now();
 
         long remaining =
                 Duration.between(
@@ -238,44 +408,44 @@ public class TimerSessionService {
         if (remaining <= 0) {
 
             timer.setRemainingSeconds(0);
+
             timer.setActive(false);
+
             timer.setEndTime(null);
 
         } else {
 
-            timer.setRemainingSeconds(remaining);
+            timer.setRemainingSeconds(
+                    remaining
+            );
         }
     }
 
-    /**
-     * Synchronizes a timer with the current server time
-     * before returning it to the frontend.
+    /*
+     * Convert TimerSession entity into
+     * TimerResponse.
      */
-    private TimerResponse syncAndMapTimer(TimerSession timer) {
-
-        if (timer.isActive()) {
-
-            updateRemainingTime(timer);
-
-            /*
-             * Save if the timer finished.
-             */
-            timerSessionRepository.save(timer);
-        }
-
-        return mapToResponse(timer);
-    }
-
     private TimerResponse mapToResponse(
             TimerSession timer) {
 
         TimerResponse response =
                 new TimerResponse();
 
-        response.setId(timer.getId());
-        response.setName(timer.getName());
-        response.setDuration(timer.getDuration());
-        response.setActive(timer.isActive());
+        response.setId(
+                timer.getId()
+        );
+
+        response.setName(
+                timer.getName()
+        );
+
+        response.setDuration(
+                timer.getDuration()
+        );
+
+        response.setActive(
+                timer.isActive()
+        );
 
         response.setRemainingSeconds(
                 timer.getRemainingSeconds()

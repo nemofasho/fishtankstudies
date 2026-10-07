@@ -4,9 +4,13 @@ import com.nehemiah.studyapp.Services.DocumentService;
 import com.nehemiah.studyapp.dto.document.CreateDocumentRequest;
 import com.nehemiah.studyapp.dto.document.DocumentResponse;
 import com.nehemiah.studyapp.dto.document.UpdateDocumentRequest;
+import com.nehemiah.studyapp.Repositories.UserRepository;
+import com.nehemiah.studyapp.models.User;
+import com.nehemiah.studyapp.exception.ResourceNotFoundException;
 
 import jakarta.validation.Valid;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -17,21 +21,35 @@ import java.util.List;
 public class DocumentController {
 
     private final DocumentService documentService;
+    private final UserRepository userRepository;
 
     public DocumentController(
-            DocumentService documentService) {
+            DocumentService documentService,
+            UserRepository userRepository) {
 
         this.documentService = documentService;
+        this.userRepository = userRepository;
     }
 
     @PostMapping("/tank/{tankId}")
     public DocumentResponse createDocument(
             @PathVariable Long tankId,
-            @Valid @RequestBody CreateDocumentRequest request) {
+            @Valid @RequestBody CreateDocumentRequest request,
+            Authentication authentication) {
+
+        User user = userRepository.findByEmail(
+                authentication.getName()
+        ).orElseThrow(() ->
+                new ResourceNotFoundException(
+                        "Authenticated user not found"
+                )
+        );
 
         return documentService.createDocument(
                 tankId,
-                request
+                request,
+                user.getId(),
+                user.getUsername()
         );
     }
 
