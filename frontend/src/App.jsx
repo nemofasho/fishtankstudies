@@ -12,6 +12,7 @@ import NotFound from "./pages/NotFound";
 import Navbar from "./components/Navbar";
 import CreateTank from "./pages/CreateTank";
 import FindTank from "./pages/FindTanks";
+import Profile from "./pages/Profile";
 
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
@@ -52,7 +53,7 @@ function App() {
           <Route path="/tanks/:tankId" element={<TankPage />} />
 
           <Route path="/tanks/create" element={<CreateTank />} />
-          
+          <Route path="/profile" element={<Profile />} />
           <Route path="/tanks/find" element={<FindTank />} />
 
         </Route>

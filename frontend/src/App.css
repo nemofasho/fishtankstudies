@@ -221,42 +221,202 @@
 }
 
 .tank-card {
-  border: 1px solid #ddd;
-  border-radius: 12px;
-  padding: 24px;
+  position: relative;
+  min-height: 360px;
+  padding: 34px 24px 24px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  /* Glass bowl */
+  background:
+    radial-gradient(
+      circle at 30% 18%,
+      rgba(255, 255, 255, 0.9) 0 5px,
+      transparent 6px
+    ),
+    radial-gradient(
+      circle at 75% 30%,
+      rgba(255, 255, 255, 0.7) 0 7px,
+      transparent 8px
+    ),
+    linear-gradient(
+      180deg,
+      rgba(225, 248, 255, 0.9) 0%,
+      rgba(183, 231, 249, 0.82) 55%,
+      rgba(139, 210, 235, 0.9) 100%
+    );
+
+  border: 3px solid rgba(119, 198, 226, 0.7);
+
+  /* Fish bowl shape */
+  border-radius: 48% 48% 42% 42% / 24% 24% 76% 76%;
+
+  box-shadow:
+    inset 0 8px 18px rgba(255, 255, 255, 0.75),
+    inset 0 -18px 25px rgba(74, 174, 207, 0.18),
+    0 12px 25px rgba(80, 150, 180, 0.16);
+
+  overflow: hidden;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+}
+
+.tank-card:hover {
+  transform: translateY(-6px);
+
+  box-shadow:
+    inset 0 8px 18px rgba(255, 255, 255, 0.8),
+    inset 0 -18px 25px rgba(74, 174, 207, 0.18),
+    0 18px 32px rgba(80, 150, 180, 0.22);
+}
+
+.tank-card::before {
+  content: "";
+  position: absolute;
+
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 82%;
+  height: 30px;
+
+  background: rgba(220, 247, 255, 0.9);
+
+  border: 3px solid rgba(119, 198, 226, 0.7);
+  border-radius: 50%;
+
+  box-shadow:
+    inset 0 5px 8px rgba(255, 255, 255, 0.8),
+    0 2px 5px rgba(70, 150, 180, 0.12);
+
+  z-index: 2;
+}
+
+.tank-card::after {
+  content: "";
+  position: absolute;
+
+  left: 8%;
+  right: 8%;
+  bottom: 12px;
+
+  height: 38px;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(194, 168, 121, 0.7) 0%,
+      rgba(224, 199, 151, 0.55) 65%,
+      transparent 70%
+    );
+
+  border-radius: 50%;
+
+  z-index: 0;
+}
+
+/* Card content */
+
+.tank-card > * {
+  position: relative;
+  z-index: 3;
 }
 
 .tank-card-header {
+  width: 100%;
+
   display: flex;
   justify-content: space-between;
-  margin-bottom: 16px;
+  align-items: center;
+
+  margin-bottom: 14px;
 }
 
 .tank-class {
-  font-size: 14px;
-  font-weight: 600;
+  display: inline-block;
+
+  padding: 6px 12px;
+
+  background: rgba(255, 255, 255, 0.65);
+
+  border: 1px solid rgba(100, 180, 215, 0.35);
+
+  border-radius: 999px;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  color: #17618a;
 }
 
 .tank-card h2 {
-  margin-bottom: 8px;
+  margin: 4px 0 8px;
+
+  font-size: 21px;
+  line-height: 1.2;
+
+  color: #123c5a;
 }
 
 .tank-subject {
-  margin-bottom: 24px;
+  margin: 0 0 20px;
+
+  color: #35627a;
 }
 
 .tank-stats {
   display: flex;
+  justify-content: center;
+
   gap: 20px;
-  margin-bottom: 24px;
+
+  margin-bottom: auto;
+
+  color: #285872;
+
+  font-size: 14px;
 }
 
 .open-tank-button {
+  position: relative;
+  z-index: 4;
+
   display: inline-block;
+
+  margin-top: 24px;
+
+  padding: 10px 24px;
+
+  border: none;
+  border-radius: 999px;
+
+  background: #2186df;
+  color: white;
+
+  font-size: 15px;
+  font-weight: 700;
+
   text-decoration: none;
-  padding: 10px 16px;
-  border: 1px solid;
-  border-radius: 8px;
+
+  box-shadow:
+    0 5px 12px rgba(33, 134, 223, 0.25);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.open-tank-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 8px 16px rgba(33, 134, 223, 0.32);
 }
 
 .empty-tanks {
@@ -309,6 +469,12 @@
   font-weight: 700;
   text-decoration: none;
   color: inherit;
+}
+
+.navbar-logo img {
+    height: 80px;
+    width: auto;
+    display: block;
 }
 
 .navbar-links {
