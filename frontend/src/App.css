@@ -764,10 +764,6 @@
     box-shadow 0.2s ease;
 }
 
-.home-action-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
-}
 
 .home-action-card h2 {
   margin: 0 0 6px;
@@ -780,6 +776,31 @@
   line-height: 1.5;
 }
 
+/* Create a Tank and Find a Tank cards */
+.home-action-card {
+  background: linear-gradient(135deg, #0b4f75, #087eaa);
+  color: #7cce72;
+  border: 1px solid #176b8c;
+  border-radius: 16px;
+  padding: 24px;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Card headings */
+.home-action-card h2 {
+  color: #7cce72;
+}
+
+/* Card descriptions */
+.home-action-card p {
+  color: #a5df91;
+}
+
+/* Icons */
 .home-action-icon {
   width: 48px;
   height: 48px;
@@ -787,10 +808,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #ddd;
+  border: 1px solid rgba(124, 206, 114, 0.4);
   border-radius: 12px;
   font-size: 26px;
   font-weight: 600;
+  color: #7cce72;
+  background: rgba(124, 206, 114, 0.15);
+}
+
+/* Hover effect */
+.home-action-card:hover {
+  background: linear-gradient(135deg, #09618d, #0a91bd);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
 }
 
 
@@ -1153,4 +1183,172 @@
 .home-activity-content span {
   font-size: 13px;
   opacity: 0.6;
+}
+
+/* My Study Tanks cards */
+.home-tank-item {
+  background: linear-gradient(135deg, #0b4f75, #087eaa);
+  border: 1px solid #176b8c;
+  border-radius: 14px;
+  padding: 18px;
+  color: #7cce72;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Tank names */
+.home-tank-item h3 {
+  color: #7cce72;
+}
+
+/* Tank subjects and class names */
+.home-tank-item p {
+  color: #a5df91;
+}
+
+/* Arrow */
+.home-tank-item span {
+  color: #7cce72;
+}
+
+/* Hover effect */
+.home-tank-item:hover {
+  background: linear-gradient(135deg, #09618d, #0a91bd);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* View all tanks link */
+.home-more-tanks {
+  color: #7cce72;
+}
+
+/* Recent Activity cards */
+.home-activity-item {
+  background: linear-gradient(135deg, #0b4f75, #087eaa);
+  border: 1px solid #176b8c;
+  border-radius: 14px;
+  padding: 18px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Activity description */
+.home-activity-content p {
+  color: #7cce72;
+}
+
+/* Activity timestamp and tank name */
+.home-activity-content span {
+  color: #a5df91;
+}
+
+/* Activity icons */
+.home-activity-icon {
+  color: #7cce72;
+  background: rgba(124, 206, 114, 0.15);
+  border: 1px solid rgba(124, 206, 114, 0.4);
+  border-radius: 12px;
+}
+
+/* Hover effect */
+.home-activity-item:hover {
+  background: linear-gradient(135deg, #09618d, #0a91bd);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+}
+
+/* View Dashboard button */
+.home-view-link {
+  display: inline-block;
+  background: #7cce72;
+  color: #0b4f75;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid #68b85e;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.home-view-link:hover {
+  background: #a5df91;
+  color: #0b4f75;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Create Tank button */
+.create-tank-button {
+  display: inline-block;
+  background: #7cce72;
+  color: #0b4f75;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid #68b85e;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.create-tank-button:hover {
+  background: #a5df91;
+  color: #0b4f75;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Back Home button */
+.find-tanks-back {
+  display: inline-block;
+  background: #7cce72;
+  color: #0b4f75;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid #68b85e;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.find-tanks-back:hover {
+  background: #a5df91;
+  color: #0b4f75;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Cancel and Create Tank buttons */
+.cancel-button,
+.submit-button {
+  display: inline-block;
+  background: #7cce72;
+  color: #0b4f75;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid #68b85e;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect */
+.cancel-button:hover,
+.submit-button:hover {
+  background: #a5df91;
+  color: #0b4f75;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Disabled buttons */
+.cancel-button:disabled,
+.submit-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }

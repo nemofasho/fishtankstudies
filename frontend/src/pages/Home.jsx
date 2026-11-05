@@ -111,7 +111,7 @@ export default function Home() {
       <section className="home-hero">
         <div>
           <p className="home-eyebrow">
-            Fishbowl Studies
+            Fishtank Studies
           </p>
 
           <h1>
