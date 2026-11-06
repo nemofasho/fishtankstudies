@@ -3615,3 +3615,700 @@
 .tank-page-state button:hover {
   background: #374151;
 }
+
+/* =========================
+   FISHBOWL CARD IMPROVEMENTS
+   ========================= */
+
+/* Dashboard bowls */
+.tank-card {
+  min-height: 360px;
+  box-sizing: border-box;
+  isolation: isolate;
+
+  background:
+    /* Glass highlights */
+    linear-gradient(
+      110deg,
+      transparent 8%,
+      rgba(255, 255, 255, 0.55) 16%,
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 78% 43%,
+      rgba(255, 255, 255, 0.8) 0 5px,
+      transparent 6px
+    ),
+    radial-gradient(
+      circle at 24% 55%,
+      rgba(255, 255, 255, 0.65) 0 4px,
+      transparent 5px
+    ),
+    linear-gradient(
+      180deg,
+      #e8f9ff 0%,
+      #c8efff 42%,
+      #a8e2f5 78%,
+      #d8f4fa 100%
+    );
+
+  border: 3px solid #a3d6e9;
+  border-radius: 48% 48% 40% 40% / 20% 20% 80% 80%;
+
+  box-shadow:
+    inset 8px 0 14px rgba(255, 255, 255, 0.65),
+    inset -8px 0 14px rgba(70, 160, 195, 0.12),
+    inset 0 -18px 18px rgba(255, 255, 255, 0.35),
+    0 12px 20px rgba(65, 130, 160, 0.15);
+}
+
+/* Glass rim */
+.tank-card::before,
+.find-tank-card::before {
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 80%;
+  height: 22px;
+  box-sizing: border-box;
+
+  background: linear-gradient(
+    180deg,
+    #f8fdff,
+    #c8eaf5
+  );
+
+  border: 3px solid #a3d6e9;
+  border-radius: 50%;
+
+  box-shadow: inset 0 3px 4px white;
+}
+
+/* Sandy bottom */
+.tank-card::after,
+.find-tank-card::after {
+  left: 8%;
+  right: 8%;
+  bottom: 12px;
+  height: 30px;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      #e6d4ad 0%,
+      #f2e5c6 60%,
+      transparent 72%
+    );
+}
+
+/* Find a Tank bowls */
+.find-tank-card {
+  min-height: 360px;
+  box-sizing: border-box;
+  isolation: isolate;
+
+  background:
+    linear-gradient(
+      110deg,
+      transparent 8%,
+      rgba(255, 255, 255, 0.55) 16%,
+      transparent 25%
+    ),
+    radial-gradient(
+      circle at 78% 43%,
+      rgba(255, 255, 255, 0.8) 0 5px,
+      transparent 6px
+    ),
+    radial-gradient(
+      circle at 24% 55%,
+      rgba(255, 255, 255, 0.65) 0 4px,
+      transparent 5px
+    ),
+    linear-gradient(
+      180deg,
+      #e8f9ff 0%,
+      #c8efff 42%,
+      #a8e2f5 78%,
+      #d8f4fa 100%
+    );
+
+  border: 3px solid #a3d6e9;
+  border-radius: 48% 48% 40% 40% / 20% 20% 80% 80%;
+
+  box-shadow:
+    inset 8px 0 14px rgba(255, 255, 255, 0.65),
+    inset -8px 0 14px rgba(70, 160, 195, 0.12),
+    inset 0 -18px 18px rgba(255, 255, 255, 0.35),
+    0 12px 20px rgba(65, 130, 160, 0.15);
+}
+
+/* Make content fit inside the bowls */
+.tank-card > *,
+.find-tank-card > * {
+  position: relative;
+  z-index: 3;
+}
+
+.tank-card h2,
+.find-tank-card h2 {
+  color: #123c5a;
+  overflow-wrap: anywhere;
+}
+
+.tank-class,
+.find-tank-class {
+  background: rgba(255, 255, 255, 0.7);
+  border-color: rgba(100, 180, 215, 0.4);
+  color: #17618a;
+}
+
+.tank-stats,
+.find-tank-info {
+  color: #285872;
+}
+
+@media (max-width: 600px) {
+  .tank-card,
+  .find-tank-card {
+    min-height: 340px;
+  }
+}
+
+/* =========================
+   REAL FISHBOWL SHAPE
+   ========================= */
+
+.tank-card,
+.find-tank-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  min-height: 360px;
+  padding: 42px 24px 26px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  /* Round bowl body */
+  border: 3px solid #9bd4e9;
+  border-radius: 0;
+  clip-path: polygon(
+    18% 3%,
+    82% 3%,
+    88% 7%,
+    94% 18%,
+    98% 35%,
+    99% 55%,
+    95% 75%,
+    86% 91%,
+    74% 97%,
+    26% 97%,
+    14% 91%,
+    5% 75%,
+    1% 55%,
+    2% 35%,
+    6% 18%,
+    12% 7%
+  );
+
+  background:
+    radial-gradient(
+      ellipse at 28% 25%,
+      rgba(255, 255, 255, 0.8),
+      transparent 35%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(224, 248, 255, 0.96),
+      rgba(174, 228, 246, 0.92) 65%,
+      rgba(210, 243, 250, 0.98)
+    );
+
+  box-shadow:
+    inset 12px 0 18px rgba(255, 255, 255, 0.65),
+    inset -12px 0 18px rgba(66, 160, 195, 0.12),
+    inset 0 -12px 15px rgba(255, 255, 255, 0.55),
+    0 12px 24px rgba(65, 130, 160, 0.16);
+
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Bowl opening / glass rim */
+.tank-card::before,
+.find-tank-card::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 78%;
+  height: 24px;
+  box-sizing: border-box;
+
+  border: 3px solid #9bd4e9;
+  border-radius: 50%;
+
+  background: linear-gradient(
+    180deg,
+    #ffffff,
+    #c7eaf6
+  );
+
+  box-shadow: inset 0 3px 5px white;
+}
+
+/* Sand at the bottom */
+.tank-card::after,
+.find-tank-card::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+
+  bottom: 10px;
+  left: 12%;
+  width: 76%;
+  height: 28px;
+
+  border-radius: 50%;
+
+  background: linear-gradient(
+    180deg,
+    #f7e9c7,
+    #dfc798
+  );
+
+  box-shadow: 0 -3px 5px rgba(255, 255, 255, 0.45);
+}
+
+/* Keep card content above the bowl decorations */
+.tank-card > *,
+.find-tank-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Hover */
+.tank-card:hover,
+.find-tank-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    inset 12px 0 18px rgba(255, 255, 255, 0.65),
+    inset -12px 0 18px rgba(66, 160, 195, 0.12),
+    0 18px 30px rgba(65, 130, 160, 0.24);
+}
+
+/* Preserve button placement and readability */
+.tank-card .open-tank-button,
+.find-tank-card .find-tank-join-button {
+  z-index: 3;
+  margin-top: auto;
+}
+
+@media (max-width: 600px) {
+  .tank-card,
+  .find-tank-card {
+    min-height: 340px;
+  }
+}
+
+
+/* =========================
+   CSS AQUARIUM DECORATIONS
+   ========================= */
+
+/* Make each tank its own decoration container */
+.tank-card,
+.find-tank-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* Sand, pebbles, and rocks */
+.tank-card::after,
+.find-tank-card::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+
+  left: 8%;
+  right: 8%;
+  bottom: 12px;
+  height: 42px;
+  pointer-events: none;
+
+  background:
+    /* Small pebbles */
+    radial-gradient(ellipse at 24% 55%,
+      #a9bac1 0 5px, transparent 6px),
+    radial-gradient(ellipse at 75% 60%,
+      #879eaa 0 8px, transparent 9px),
+    radial-gradient(ellipse at 34% 80%,
+      #c0cbd0 0 3px, transparent 4px),
+    radial-gradient(ellipse at 62% 82%,
+      #aebdc4 0 4px, transparent 5px),
+
+    /* Sandy floor */
+    radial-gradient(ellipse at 50% 100%,
+      #f2dfb8 0 55%, transparent 57%);
+
+  border-radius: 50%;
+}
+
+/* Seaweed on both sides */
+.tank-card,
+.find-tank-card {
+  background-color: transparent;
+
+  background-image:
+    /* Left seaweed blades */
+    linear-gradient(76deg,
+      transparent 46%,
+      #55bd91 47% 51%,
+      transparent 52%),
+    linear-gradient(66deg,
+      transparent 47%,
+      #3aa984 48% 52%,
+      transparent 53%),
+    linear-gradient(100deg,
+      transparent 46%,
+      #75cda0 47% 51%,
+      transparent 52%),
+
+    /* Right seaweed blades */
+    linear-gradient(284deg,
+      transparent 46%,
+      #55bd91 47% 51%,
+      transparent 52%),
+    linear-gradient(294deg,
+      transparent 47%,
+      #3aa984 48% 52%,
+      transparent 53%),
+
+    /* Water */
+    linear-gradient(
+      180deg,
+      rgba(232, 249, 255, 0.96),
+      rgba(174, 228, 246, 0.94) 72%,
+      rgba(214, 243, 250, 0.98)
+    );
+
+  background-repeat: no-repeat;
+
+  background-size:
+    35px 95px,
+    30px 80px,
+    28px 65px,
+    35px 95px,
+    30px 80px,
+    100% 100%;
+
+  background-position:
+    8% calc(100% - 38px),
+    13% calc(100% - 38px),
+    18% calc(100% - 38px),
+    92% calc(100% - 38px),
+    87% calc(100% - 38px),
+    center;
+}
+
+/* Bubbles */
+.tank-card > *,
+.find-tank-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Ensure buttons remain clickable */
+.open-tank-button,
+.find-tank-join-button {
+  position: relative;
+  z-index: 3;
+}
+
+
+/* =========================
+   FULLER AQUARIUM GRASS
+   ========================= */
+
+.tank-card,
+.find-tank-card {
+  background-image:
+    /* Left grass blades */
+    linear-gradient(76deg,
+      transparent 44%, #65c99b 45% 52%, transparent 53%),
+    linear-gradient(62deg,
+      transparent 43%, #36a77f 44% 51%, transparent 52%),
+    linear-gradient(88deg,
+      transparent 44%, #81d4a3 45% 51%, transparent 52%),
+    linear-gradient(104deg,
+      transparent 43%, #4bb98b 44% 51%, transparent 52%),
+    linear-gradient(54deg,
+      transparent 44%, #55bd91 45% 52%, transparent 53%),
+    linear-gradient(115deg,
+      transparent 44%, #329b77 45% 51%, transparent 52%),
+
+    /* Right grass blades */
+    linear-gradient(284deg,
+      transparent 44%, #65c99b 45% 52%, transparent 53%),
+    linear-gradient(298deg,
+      transparent 43%, #36a77f 44% 51%, transparent 52%),
+    linear-gradient(272deg,
+      transparent 44%, #81d4a3 45% 51%, transparent 52%),
+    linear-gradient(256deg,
+      transparent 43%, #4bb98b 44% 51%, transparent 52%),
+    linear-gradient(306deg,
+      transparent 44%, #55bd91 45% 52%, transparent 53%),
+    linear-gradient(245deg,
+      transparent 44%, #329b77 45% 51%, transparent 52%),
+
+    /* Water */
+    linear-gradient(
+      180deg,
+      rgba(232, 249, 255, 0.96),
+      rgba(174, 228, 246, 0.94) 72%,
+      rgba(214, 243, 250, 0.98)
+    );
+
+  background-repeat: no-repeat;
+
+  background-size:
+    34px 95px,
+    32px 78px,
+    30px 110px,
+    30px 88px,
+    28px 68px,
+    26px 100px,
+
+    34px 95px,
+    32px 78px,
+    30px 110px,
+    30px 88px,
+    28px 68px,
+    26px 100px,
+
+    100% 100%;
+
+  background-position:
+    5% bottom,
+    10% bottom,
+    14% bottom,
+    19% bottom,
+    23% bottom,
+    8% bottom,
+
+    95% bottom,
+    90% bottom,
+    86% bottom,
+    81% bottom,
+    77% bottom,
+    92% bottom,
+
+    center;
+}
+
+
+/* ========================================
+   FIND A TANK — MATCH DASHBOARD FISHBOWLS
+   Same aquarium styling, without bubbles
+   ======================================== */
+
+.find-tank-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  box-sizing: border-box;
+
+  min-height: 360px;
+  padding: 42px 24px 26px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  border: 3px solid #9bd4e9;
+  border-radius: 45% 45% 28% 28% / 12% 12% 24% 24%;
+
+  background-color: transparent;
+
+  background-image:
+    /* Left grass */
+    linear-gradient(76deg,
+      transparent 44%, #65c99b 45% 52%, transparent 53%),
+    linear-gradient(62deg,
+      transparent 43%, #36a77f 44% 51%, transparent 52%),
+    linear-gradient(88deg,
+      transparent 44%, #81d4a3 45% 51%, transparent 52%),
+    linear-gradient(104deg,
+      transparent 43%, #4bb98b 44% 51%, transparent 52%),
+    linear-gradient(54deg,
+      transparent 44%, #55bd91 45% 52%, transparent 53%),
+    linear-gradient(115deg,
+      transparent 44%, #329b77 45% 51%, transparent 52%),
+
+    /* Right grass */
+    linear-gradient(284deg,
+      transparent 44%, #65c99b 45% 52%, transparent 53%),
+    linear-gradient(298deg,
+      transparent 43%, #36a77f 44% 51%, transparent 52%),
+    linear-gradient(272deg,
+      transparent 44%, #81d4a3 45% 51%, transparent 52%),
+    linear-gradient(256deg,
+      transparent 43%, #4bb98b 44% 51%, transparent 52%),
+    linear-gradient(306deg,
+      transparent 44%, #55bd91 45% 52%, transparent 53%),
+    linear-gradient(245deg,
+      transparent 44%, #329b77 45% 51%, transparent 52%),
+
+    /* Water and glass */
+    radial-gradient(
+      ellipse at 28% 20%,
+      rgba(255, 255, 255, 0.8),
+      transparent 35%
+    ),
+    linear-gradient(
+      180deg,
+      rgba(232, 249, 255, 0.96),
+      rgba(174, 228, 246, 0.94) 72%,
+      rgba(214, 243, 250, 0.98)
+    );
+
+  background-repeat: no-repeat;
+
+  background-size:
+    34px 95px, 32px 78px, 30px 110px,
+    30px 88px, 28px 68px, 26px 100px,
+    34px 95px, 32px 78px, 30px 110px,
+    30px 88px, 28px 68px, 26px 100px,
+    100% 100%, 100% 100%;
+
+  background-position:
+    5% bottom, 10% bottom, 14% bottom,
+    19% bottom, 23% bottom, 8% bottom,
+    95% bottom, 90% bottom, 86% bottom,
+    81% bottom, 77% bottom, 92% bottom,
+    center, center;
+
+  box-shadow:
+    inset 12px 0 18px rgba(255, 255, 255, 0.65),
+    inset -12px 0 18px rgba(66, 160, 195, 0.12),
+    inset 0 -12px 15px rgba(255, 255, 255, 0.55),
+    0 12px 24px rgba(65, 130, 160, 0.16);
+
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* Glass rim */
+.find-tank-card::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+
+  top: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 78%;
+  height: 24px;
+
+  border: 3px solid #9bd4e9;
+  border-radius: 50%;
+
+  background: linear-gradient(
+    180deg,
+    #ffffff,
+    #c7eaf5
+  );
+
+  box-shadow: inset 0 3px 5px white;
+
+  pointer-events: none;
+}
+
+/* Sand, rocks, and pebbles */
+.find-tank-card::after {
+  content: "";
+  position: absolute;
+  z-index: 1;
+
+  left: 8%;
+  right: 8%;
+  bottom: 12px;
+  height: 42px;
+
+  background:
+    radial-gradient(ellipse at 24% 55%,
+      #a9bac1 0 5px, transparent 6px),
+    radial-gradient(ellipse at 75% 60%,
+      #879eaa 0 8px, transparent 9px),
+    radial-gradient(ellipse at 34% 80%,
+      #c0cbd0 0 3px, transparent 4px),
+    radial-gradient(ellipse at 62% 82%,
+      #aebdc4 0 4px, transparent 5px),
+    radial-gradient(ellipse at 50% 100%,
+      #f2dfb8 0 55%, transparent 57%);
+
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+/* Content above aquarium decorations */
+.find-tank-card > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Match Dashboard typography */
+.find-tank-card h2 {
+  color: #123c5a;
+}
+
+.find-tank-card-header p,
+.find-tank-class,
+.find-tank-info {
+  color: #285872;
+}
+
+/* Join button */
+.find-tank-join-button {
+  position: relative;
+  z-index: 3;
+
+  margin-top: auto;
+  border-radius: 999px;
+
+  background: #2186df;
+  color: white;
+}
+
+/* Hover */
+.find-tank-card:hover {
+  transform: translateY(-5px);
+
+  box-shadow:
+    inset 12px 0 18px rgba(255, 255, 255, 0.65),
+    inset -12px 0 18px rgba(66, 160, 195, 0.12),
+    0 18px 30px rgba(65, 130, 160, 0.24);
+}
+
+@media (max-width: 600px) {
+  .find-tank-card {
+    min-height: 340px;
+  }
+}
+
+.find-tank-join-button {
+  width: 70%;
+  padding: 9px 16px;
+  font-size: 14px;
+}

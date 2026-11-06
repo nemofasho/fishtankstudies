@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(
@@ -44,4 +45,15 @@ public class User {
 
     @ManyToMany(mappedBy = "members")
     private List<Tank> tanks = new ArrayList<>();
+
+    @Column(length = 500)
+    private String bio;
+
+    @Column(nullable = false)
+    private LocalDateTime createdAt;
+
+    @PrePersist
+     protected void onCreate() {
+     createdAt = LocalDateTime.now();
+}
 }

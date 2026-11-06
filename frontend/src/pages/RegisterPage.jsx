@@ -58,7 +58,8 @@ export default function RegisterPage() {
       <div className="auth-card">
 
         <div className="auth-header">
-          <h1>Fishbowl Studies</h1>
+          <h1>Fishbowl</h1>
+          <h2>Studies</h2>
           <p>Create your account</p>
         </div>
 

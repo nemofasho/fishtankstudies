@@ -23,7 +23,10 @@ function Navbar() {
     <nav className="navbar">
 
       <Link to="/" className="navbar-logo">
-        Fishbowl Studies
+        <img
+          src="/fishbowl-logo.jpeg"
+          alt="Fishbowl Studies"
+        />
       </Link>
 
       {isAuthenticated && (
@@ -51,17 +54,16 @@ function Navbar() {
             Dashboard
           </NavLink>
 
-          <span className="navbar-user">
-            {user?.username}
-          </span>
-
-          <button
-            type="button"
-            className="logout-button"
-            onClick={logout}
+          <NavLink
+            to="/profile"
+            className={({ isActive }) =>
+              isActive
+                ? "nav-link active"
+                : "nav-link"
+            }
           >
-            Logout
-          </button>
+            {user?.username}
+          </NavLink>
 
         </div>
       )}
