@@ -23,11 +23,8 @@ function Navbar() {
     <nav className="navbar">
 
       <Link to="/" className="navbar-logo">
-        <img
-          src="/fishbowl-logo.jpeg"
-          alt="Fishbowl Studies"
-        />
-      </Link>
+        Fishtank Studies
+    </Link>
 
       {isAuthenticated && (
         <div className="navbar-links">

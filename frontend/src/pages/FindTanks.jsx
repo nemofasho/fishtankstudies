@@ -74,7 +74,7 @@ export default function FindTanks() {
       <div className="find-tanks-header">
         <div>
           <p className="find-tanks-eyebrow">
-            StudySync
+            Fishtank Studies
           </p>
 
           <h1>Find a Tank</h1>
